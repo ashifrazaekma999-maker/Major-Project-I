@@ -1,0 +1,8 @@
+{
+  "synthetic": true,
+  "subjects": 8,
+  "face_pairs": 8,
+  "fingerprint_pairs": 8,
+  "match_pairs": 8,
+  "purpose": "NETRISH MVP biometric workflow testing"
+}
