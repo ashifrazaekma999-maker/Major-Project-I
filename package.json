@@ -6,12 +6,13 @@
   "scripts": {
     "start": "node server/index.js",
     "server": "node server/index.js",
-    "test": "node server/tests/biometric.test.js",
+    "test": "node server/tests/biometric.test.js && node server/tests/network_and_security.test.js && node server/tests/mvp_full_suite.test.js",
     "client": "vite --config client/vite.config.js client",
     "build:client": "vite build --config client/vite.config.js client",
     "dev": "node server/index.js"
   },
   "dependencies": {
+    "@google/genai": "^2.31.0",
     "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",

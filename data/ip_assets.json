@@ -1,0 +1,104 @@
+[
+  {
+    "id": "ASSET-IP-001",
+    "ip": "10.42.18.91",
+    "name": "NCR Cyber Enclave Gateway Switch",
+    "description": "Primary NIC dedicated optical gateway terminating at Delhi Police Headquarters.",
+    "departmentId": "D001",
+    "departmentName": "Cyber Crime Investigation Division",
+    "category": "GATEWAY",
+    "hostname": "gw-opt-ncr-01.govnet.nic.in",
+    "networkProvider": "NIC National Optical Fiber",
+    "cameraReference": null,
+    "tags": ["CRITICAL_INFRA", "FIBER_BACKBONE", "GATEWAY"],
+    "notes": "Verified by SP Neha Sharma during Q3 Security Audit.",
+    "verificationStatus": "VERIFIED",
+    "createdBy": "OFFICER-001",
+    "createdAt": "2026-10-01T08:00:00.000Z",
+    "updatedAt": "2026-10-01T08:00:00.000Z",
+    "lastEnrichment": {
+      "type": "IPv4",
+      "classification": "PRIVATE_RFC1918",
+      "isPrivate": true,
+      "source": "Local Node Classification & Reverse DNS"
+    },
+    "associatedCaseId": "C00228",
+    "isActive": true,
+    "changeHistory": [
+      {
+        "timestamp": "2026-10-01T08:00:00.000Z",
+        "officerId": "OFFICER-001",
+        "action": "ASSET_CREATED",
+        "details": "Initial asset registration"
+      }
+    ]
+  },
+  {
+    "id": "ASSET-IP-002",
+    "ip": "10.42.18.105",
+    "name": "Evidence Locker NVR Stream Server",
+    "description": "Network Video Recorder capturing digital forensics room and custody transit.",
+    "departmentId": "D001",
+    "departmentName": "Cyber Crime Investigation Division",
+    "category": "NVR_CAMERA",
+    "hostname": "nvr-evidence-01.local",
+    "networkProvider": "Internal Police LAN",
+    "cameraReference": "CAM-EVID-04",
+    "tags": ["SURVEILLANCE", "CCTV", "EVIDENCE_ROOM"],
+    "notes": "Secured RTSP stream endpoint on port 554.",
+    "verificationStatus": "VERIFIED",
+    "createdBy": "ADMIN-007",
+    "createdAt": "2026-10-01T09:30:00.000Z",
+    "updatedAt": "2026-10-01T09:30:00.000Z",
+    "lastEnrichment": {
+      "type": "IPv4",
+      "classification": "PRIVATE_RFC1918",
+      "isPrivate": true,
+      "source": "Local Node Classification & Reverse DNS"
+    },
+    "associatedCaseId": "C00228",
+    "isActive": true,
+    "changeHistory": [
+      {
+        "timestamp": "2026-10-01T09:30:00.000Z",
+        "officerId": "ADMIN-007",
+        "action": "ASSET_CREATED",
+        "details": "NVR Camera stream registered"
+      }
+    ]
+  },
+  {
+    "id": "ASSET-IP-003",
+    "ip": "10.42.19.45",
+    "name": "ED Financial Forensics Workstation",
+    "description": "Enforcement Directorate high-performance terminal for PMLA banking data ingestion.",
+    "departmentId": "D004",
+    "departmentName": "ED (Enforcement Directorate)",
+    "category": "WORKSTATION",
+    "hostname": "ed-pmla-ws09.gov.in",
+    "networkProvider": "NIC Government Network",
+    "cameraReference": null,
+    "tags": ["FORENSICS", "ED", "TERMINAL"],
+    "notes": "Restricted hardware terminal assigned to ACP Rajesh Kumar.",
+    "verificationStatus": "VERIFIED",
+    "createdBy": "SEC-012",
+    "createdAt": "2026-10-01T10:00:00.000Z",
+    "updatedAt": "2026-10-01T10:00:00.000Z",
+    "lastEnrichment": {
+      "type": "IPv4",
+      "classification": "PRIVATE_RFC1918",
+      "isPrivate": true,
+      "source": "Local Node Classification & Reverse DNS"
+    },
+    "associatedCaseId": "C00104",
+    "isActive": true,
+    "changeHistory": [
+      {
+        "timestamp": "2026-10-01T10:00:00.000Z",
+        "officerId": "SEC-012",
+        "action": "ASSET_CREATED",
+        "details": "Workstation enrolled"
+      }
+    ]
+  }
+]

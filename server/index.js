@@ -10,6 +10,7 @@ import intelligenceRouter from './routes/intelligence.js';
 import aiRouter from './routes/ai.js';
 import analyticsRouter from './routes/analytics.js';
 import biometricRouter from './routes/biometric.js';
+import networkRouter from './routes/network.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,6 +43,7 @@ app.use('/api/intelligence', intelligenceRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/analytics', analyticsRouter);
 app.use('/api/biometric', biometricRouter);
+app.use('/api/network', networkRouter);
 
 app.get('/api/health', (req, res) => {
   res.json({
@@ -49,9 +51,13 @@ app.get('/api/health', (req, res) => {
     service: 'NETRISH Command Server',
     version: '1.0.0',
     datasetLoaded: store.isLoaded,
+    datasetMetadata: store.datasetMetadata,
     recordsCount: store.records.length,
     entitiesCount: store.entities.size,
     casesCount: store.cases.size,
+    phonesCount: store.phones.size,
+    vehiclesCount: store.vehicles.size,
+    graphNodesCount: store.graph.size,
     auditEntries: store.auditTrail.length,
     uptime: process.uptime()
   });
@@ -97,8 +103,7 @@ process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
-const csvPath = path.join(__dirname, '../data/dataset.csv');
-store.loadDataset(csvPath);
+store.loadDataset();
 
 function startServer(port) {
   const server = app.listen(port, () => {

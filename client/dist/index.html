@@ -95,6 +95,100 @@
       height: 100%;
       background: #090e1c !important;
     }
+
+    /* COMPREHENSIVE LIGHT / DARK ACCESSIBILITY THEME & TYPOGRAPHY */
+    html:not(.dark) {
+      color-scheme: light;
+    }
+    html:not(.dark) body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    html:not(.dark) .bg-slate-950,
+    html:not(.dark) .bg-slate-900,
+    html:not(.dark) .bg-gray-900,
+    html:not(.dark) .bg-zinc-900,
+    html:not(.dark) .bg-black {
+      background-color: #ffffff !important;
+      color: #0f172a;
+      border-color: #e2e8f0 !important;
+    }
+    html:not(.dark) .bg-slate-900\/50,
+    html:not(.dark) .bg-slate-900\/60,
+    html:not(.dark) .bg-slate-900\/80,
+    html:not(.dark) .bg-slate-900\/90,
+    html:not(.dark) .bg-slate-950\/60,
+    html:not(.dark) .bg-slate-950\/80,
+    html:not(.dark) .bg-slate-950\/90 {
+      background-color: rgba(255, 255, 255, 0.95) !important;
+      color: #0f172a;
+      border-color: #e2e8f0 !important;
+    }
+    html:not(.dark) .bg-slate-800,
+    html:not(.dark) .bg-slate-850 {
+      background-color: #f8fafc !important;
+      color: #1e293b;
+      border-color: #e2e8f0 !important;
+    }
+    html:not(.dark) .hover\:bg-slate-800:hover,
+    html:not(.dark) .hover\:bg-slate-700:hover {
+      background-color: #e2e8f0 !important;
+      color: #0f172a;
+    }
+    html:not(.dark) .text-white,
+    html:not(.dark) .text-slate-100,
+    html:not(.dark) .text-slate-200 {
+      color: #0f172a !important;
+    }
+    html:not(.dark) .text-slate-300 {
+      color: #1e293b !important;
+    }
+    html:not(.dark) .text-slate-400 {
+      color: #334155 !important;
+    }
+    html:not(.dark) .text-slate-500 {
+      color: #475569 !important;
+    }
+    html:not(.dark) .border-slate-800,
+    html:not(.dark) .border-slate-700,
+    html:not(.dark) .border-slate-600 {
+      border-color: #cbd5e1 !important;
+    }
+    html:not(.dark) input,
+    html:not(.dark) select,
+    html:not(.dark) textarea {
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+    html:not(.dark) input::placeholder,
+    html:not(.dark) textarea::placeholder {
+      color: #64748b !important;
+    }
+    html:not(.dark) th {
+      background-color: #f8fafc !important;
+      color: #334155 !important;
+      border-color: #e2e8f0 !important;
+    }
+    html:not(.dark) .text-cyan-400,
+    html:not(.dark) .text-cyan-300 {
+      color: #0891b2 !important;
+    }
+    html:not(.dark) .text-amber-400,
+    html:not(.dark) .text-amber-300 {
+      color: #d97706 !important;
+    }
+    html:not(.dark) .text-emerald-400,
+    html:not(.dark) .text-emerald-300 {
+      color: #059669 !important;
+    }
+    html:not(.dark) .text-red-400,
+    html:not(.dark) .text-red-300 {
+      color: #dc2626 !important;
+    }
+    html:not(.dark) .leaflet-container {
+      background: #f8fafc !important;
+    }
   </style>
 </head>
 <body class="antialiased selection:bg-cyan-500 selection:text-black">
@@ -115,7 +209,7 @@
       { id: 'D009', name: 'DRI (Directorate of Revenue Intelligence)', fullName: 'Directorate of Revenue Intelligence', badge: 'Customs & Port Smuggling' }
     ];
 
-    function LandingPage({ onAutoEnter }) {
+    function LandingPage({ onAutoEnter, onOpenAuth, isAuthenticated }) {
       const [now, setNow] = useState(new Date());
       const [loadingSpeed, setLoadingSpeed] = useState(15);
       const [locationStr, setLocationStr] = useState('New Delhi, India (HQ Grid: 28.6139° N, 77.2090° E)');
@@ -141,26 +235,19 @@
       useEffect(() => {
         const interval = setInterval(() => {
           setLoadingSpeed(prev => {
-            if (prev >= 100) {
-              clearInterval(interval);
-              setTimeout(() => {
-                onAutoEnter();
-              }, 400);
-              return 100;
-            }
             const inc = Math.floor(Math.random() * 8) + 6;
             const next = Math.min(100, prev + inc);
             if (next >= 100) {
               clearInterval(interval);
-              setTimeout(() => {
-                onAutoEnter();
-              }, 400);
+              if (isAuthenticated) {
+                setTimeout(() => onAutoEnter(), 400);
+              }
             }
             return next;
           });
         }, 90);
         return () => clearInterval(interval);
-      }, [onAutoEnter]);
+      }, [onAutoEnter, isAuthenticated]);
 
       const dayStr = now.toLocaleDateString('en-IN', { weekday: 'long' });
       const dateStr = now.toLocaleDateString('en-IN', {
@@ -210,7 +297,7 @@
               </p>
             </div>
 
-            <div className="relative w-72 h-72 sm:w-88 sm:h-88 flex items-center justify-center cursor-pointer" onClick={onAutoEnter}>
+            <div className="relative w-72 h-72 sm:w-88 sm:h-88 flex items-center justify-center cursor-pointer" onClick={() => { if (isAuthenticated) onAutoEnter(); else onOpenAuth('LOGIN'); }}>
               <div className="absolute inset-0 rounded-full bg-cyan-500/10 blur-3xl pulse-glow pointer-events-none"></div>
 
               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 300 300">
@@ -278,13 +365,29 @@
               </div>
             </div>
 
-            <div className="text-center space-y-2 font-mono">
+            <div className="text-center space-y-3 font-mono">
               <div className="inline-block px-4 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-950/60 text-cyan-300 font-bold tracking-widest text-xs uppercase shadow">
                 SECURE INTELLIGENCE HUB
               </div>
               <div className="text-xs text-slate-400">
-                Boot Progress: <strong className="text-white">{loadingSpeed}%</strong> • {loadingSpeed < 100 ? 'Decrypting Forensic Database...' : 'Authentication Passed • Entering Workspace...'}
+                Boot Progress: <strong className="text-white">{loadingSpeed}%</strong> • {loadingSpeed < 100 ? 'Synchronizing Encryption Enclave...' : 'Enclave Online • Restricted Law Enforcement Access'}
               </div>
+              {loadingSpeed >= 100 && (
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                  <button
+                    onClick={() => onOpenAuth('LOGIN')}
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.4)] transition transform hover:scale-105"
+                  >
+                    🔑 OFFICER SECURE LOGIN
+                  </button>
+                  <button
+                    onClick={() => onOpenAuth('SIGNUP')}
+                    className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-slate-700 font-mono font-bold text-xs uppercase tracking-wider transition"
+                  >
+                    📝 NEW ENROLLMENT
+                  </button>
+                </div>
+              )}
             </div>
           </main>
 
@@ -408,7 +511,7 @@
 
       const collabItems = [
         { id: 'my-department', label: 'My Department (Grid)', icon: '🏛️', badge: 'REGISTER FIR' },
-        { id: 'surveillance-room', label: 'Live Screen & Camera Watch', icon: '📹', badge: 'LIVE FEED' },
+        { id: 'network-monitor', label: 'Network & Camera Security Monitor', icon: '📡', badge: 'IP & CAM' },
         { id: 'erp-access', label: 'Access Requests', icon: '🔑' }
       ];
 
@@ -2052,18 +2155,18 @@
               </div>
             </div>
 
-            {/* Card 5: Live Surveillance */}
+            {/* Card 5: Network & Camera Security Monitor */}
             <div
-              onClick={() => setTab('surveillance-room')}
-              className={`border rounded-xl p-4 ${cardBg} hover:border-red-500 transition cursor-pointer shadow group select-none`}
+              onClick={() => setTab('network-monitor')}
+              className={`border rounded-xl p-4 ${cardBg} hover:border-cyan-500 transition cursor-pointer shadow group select-none`}
             >
               <div className={`flex justify-between items-center ${textMuted}`}>
-                <span className="uppercase text-[11px] font-bold">LIVE SURVEILLANCE</span>
-                <span className="text-red-500 group-hover:translate-x-1 transition-transform font-bold">➔</span>
+                <span className="uppercase text-[11px] font-bold">NETWORK & CAMERA MONITOR</span>
+                <span className="text-cyan-500 group-hover:translate-x-1 transition-transform font-bold">➔</span>
               </div>
-              <h3 className="text-xl font-black mt-1 text-red-400">Active Monitor</h3>
-              <div className={`mt-2 text-[11px] text-red-400 underline`}>
-                Live Screen & Webcam Watch
+              <h3 className="text-xl font-black mt-1 text-cyan-400">Security Console</h3>
+              <div className={`mt-2 text-[11px] text-cyan-400 underline`}>
+                IP Intelligence & Cam Feeds
               </div>
             </div>
           </div>
@@ -3144,25 +3247,44 @@
       );
     }
 
-    function AiInvestigationChatbotView({ isDark }) {
+    function AiInvestigationChatbotView({ isDark, currentUser }) {
       const [caseId, setCaseId] = useState('C00228');
+      const [aiMode, setAiMode] = useState('CASE_GROUNDING'); // 'CASE_GROUNDING' | 'RESEARCH_ASSISTANT'
+      const [aiStatus, setAiStatus] = useState({ configured: false, model: 'gemini-2.5-flash', statusText: 'Checking...' });
       const [messages, setMessages] = useState([
         {
           id: 1,
           sender: 'ai',
-          text: `Welcome, Officer. I am your NETRISH AI Investigation Copilot. I have indexed all 10,000 forensic records and 989 case files. Ask me anything about Case #${caseId}, financial money trails, accused persons, phone records, or request a complete judicial summary.`
+          text: `Welcome, Officer. I am your NETRISH AI Investigation Assistant.\n\n• Indexed 200,000 synthetic forensic records and 6,000 case files.\n• Toggle between Case Evidence Investigation and External Research Assistant.\n• All internal records are synthetic test data; human verification is required under Indian evidence protocols.`,
+          mode: 'CASE_GROUNDING'
         }
       ]);
       const [inputMsg, setInputMsg] = useState('');
       const [loading, setLoading] = useState(false);
       const chatEndRef = useRef(null);
 
-      const quickPrompts = [
+      useEffect(() => {
+        fetch('/api/ai/status')
+          .then(r => r.json())
+          .then(d => {
+            if (d.success) setAiStatus(d);
+          })
+          .catch(() => {
+            setAiStatus({ configured: false, model: 'Local Analyzer', statusText: 'Local Offline Fallback' });
+          });
+      }, []);
+
+      const quickPrompts = aiMode === 'CASE_GROUNDING' ? [
         `Summarize Case #${caseId}`,
         `Explain the Hawala money trail for Case #${caseId}`,
         `Who is the primary accused and what is their role?`,
         `What burner SIMs and tower pings were recorded?`,
         `Recommend IPC & IT Act charge sheet sections`
+      ] : [
+        `What are the statutory guidelines under BNS for digital forensic evidence admissibility?`,
+        `Explain typical Hawala structuring methods across inter-state shell entities`,
+        `Summary of Section 65B Indian Evidence Act certificate requirements`,
+        `Common cyber crime indicators for unauthorized crypto off-ramps`
       ];
 
       useEffect(() => {
@@ -3173,57 +3295,135 @@
         const query = textToSend || inputMsg;
         if (!query.trim() || loading) return;
 
-        const userMsg = { id: Date.now(), sender: 'user', text: query };
+        const userMsg = { id: Date.now(), sender: 'user', text: query, mode: aiMode };
         setMessages(prev => [...prev, userMsg]);
         setInputMsg('');
         setLoading(true);
 
-        fetch('/api/ai/chat', {
+        const token = localStorage.getItem('netrish_token');
+        const endpoint = aiMode === 'RESEARCH_ASSISTANT' ? '/api/ai/research' : '/api/ai/chat';
+        const payload = aiMode === 'RESEARCH_ASSISTANT'
+          ? { query }
+          : { message: query, caseId, isResearch: false };
+
+        fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: query, caseId })
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify(payload)
         })
         .then(r => r.json())
         .then(d => {
           if (d.success) {
-            setMessages(prev => [...prev, { id: Date.now() + 1, sender: 'ai', text: d.reply }]);
+            setMessages(prev => [
+              ...prev,
+              {
+                id: Date.now() + 1,
+                sender: 'ai',
+                text: d.reply || d.answer || 'Response generated.',
+                engine: d.engine,
+                engineStatus: d.engineStatus,
+                citations: d.citations || [],
+                facts: d.facts || [],
+                inferences: d.inferences || [],
+                possible_leads: d.possible_leads || [],
+                isGrounded: d.isGrounded,
+                mode: aiMode
+              }
+            ]);
+          } else {
+            setMessages(prev => [
+              ...prev,
+              {
+                id: Date.now() + 1,
+                sender: 'ai',
+                text: `Error: ${d.error || d.message || 'Investigation query rejected.'}`,
+                isError: true,
+                mode: aiMode
+              }
+            ]);
           }
           setLoading(false);
         })
-        .catch(() => {
-          setMessages(prev => [...prev, { id: Date.now() + 1, sender: 'ai', text: 'Connection issue. Could not reach AI Copilot engine.' }]);
+        .catch(err => {
+          setMessages(prev => [
+            ...prev,
+            {
+              id: Date.now() + 1,
+              sender: 'ai',
+              text: `Network or Server Error: ${err.message}. Local rule-based analyzer active.`,
+              isError: true,
+              mode: aiMode
+            }
+          ]);
           setLoading(false);
         });
       };
+
+      const cardBg = isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm';
+      const chatBg = isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200';
 
       return (
         <div className="p-6 space-y-4 max-w-7xl mx-auto font-sans h-[calc(100vh-5rem)] flex flex-col">
           <div className="border-b pb-4 border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-xl">🤖</span>
-                <h1 className="text-xl font-black font-mono tracking-wide">
-                  AI INVESTIGATION COPILOT (CONVERSATIONAL CHATBOT)
+                <span className="text-2xl">🤖</span>
+                <h1 className="text-xl font-black font-mono tracking-wide text-cyan-400">
+                  AI INVESTIGATOR & RESEARCH ASSISTANT
                 </h1>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-mono border ${
+                  aiStatus.configured
+                    ? 'bg-emerald-950 text-emerald-400 border-emerald-800'
+                    : 'bg-amber-950 text-amber-300 border-amber-800'
+                }`}>
+                  {aiStatus.configured ? `🟢 Gemini API (${aiStatus.model})` : '🟡 Gemini Not Configured (Local Engine Active)'}
+                </span>
               </div>
               <p className="text-xs text-slate-400 mt-1 font-mono">
-                Ask any inquiry regarding cases, suspects, money laundering trails, and receive synthesized judicial briefs.
+                Investigative case synthesis citing 200,000 synthetic records and live legal/intelligence research.
               </p>
             </div>
 
-            <div className="flex items-center space-x-3 font-mono text-xs">
-              <label className="text-slate-400">ACTIVE CASE:</label>
-              <input
-                type="text"
-                value={caseId}
-                onChange={e => setCaseId(e.target.value.toUpperCase())}
-                className="bg-slate-900 border border-slate-700 text-cyan-300 px-3 py-1.5 rounded-lg outline-none w-28 text-center font-bold"
-              />
+            {/* Mode Toggle & Case Input */}
+            <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+              <div className="flex bg-slate-900 p-0.5 rounded-lg border border-slate-700">
+                <button
+                  onClick={() => setAiMode('CASE_GROUNDING')}
+                  className={`px-3 py-1 rounded-md transition font-bold ${
+                    aiMode === 'CASE_GROUNDING' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  📁 CASE GROUNDING
+                </button>
+                <button
+                  onClick={() => setAiMode('RESEARCH_ASSISTANT')}
+                  className={`px-3 py-1 rounded-md transition font-bold ${
+                    aiMode === 'RESEARCH_ASSISTANT' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  🌐 WEB RESEARCH
+                </button>
+              </div>
+
+              {aiMode === 'CASE_GROUNDING' && (
+                <div className="flex items-center space-x-1.5 font-mono text-xs">
+                  <label className="text-slate-400 text-[10px]">CASE:</label>
+                  <input
+                    type="text"
+                    value={caseId}
+                    onChange={e => setCaseId(e.target.value.toUpperCase())}
+                    className="bg-slate-900 border border-slate-700 text-cyan-300 px-2 py-1 rounded outline-none w-24 text-center font-bold"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2 pt-1 font-mono text-[11px]">
-            <span className="text-slate-400 self-center">QUICK INQUIRIES:</span>
+            <span className="text-slate-400 self-center">SUGGESTIONS:</span>
             {quickPrompts.map((p, i) => (
               <button
                 key={i}
@@ -3235,25 +3435,58 @@
             ))}
           </div>
 
-          <div className="flex-1 bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-y-auto space-y-4 shadow-inner">
+          <div className={`flex-1 ${chatBg} border rounded-2xl p-4 overflow-y-auto space-y-4 shadow-inner`}>
             {messages.map(m => (
               <div
                 key={m.id}
                 className={`flex items-start space-x-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {m.sender === 'ai' && (
-                  <div className="w-8 h-8 rounded-full bg-purple-900 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow">
-                    🤖
+                  <div className={`w-8 h-8 rounded-full ${m.mode === 'RESEARCH_ASSISTANT' ? 'bg-purple-900' : 'bg-cyan-900'} text-white flex items-center justify-center font-bold text-xs shrink-0 shadow`}>
+                    {m.mode === 'RESEARCH_ASSISTANT' ? '🌐' : '🤖'}
                   </div>
                 )}
                 <div
-                  className={`max-w-2xl rounded-2xl p-4 text-xs font-mono whitespace-pre-line leading-relaxed shadow ${
+                  className={`max-w-3xl rounded-2xl p-4 text-xs font-mono whitespace-pre-line leading-relaxed shadow space-y-2 ${
                     m.sender === 'user'
                       ? 'bg-cyan-600 text-white rounded-br-none'
-                      : 'bg-slate-900 text-slate-200 border border-slate-800 rounded-bl-none'
+                      : m.isError
+                        ? 'bg-red-950 text-red-200 border border-red-800 rounded-bl-none'
+                        : `${cardBg} rounded-bl-none`
                   }`}
                 >
-                  {m.text}
+                  <div>{m.text}</div>
+
+                  {/* Grounding & Citations display */}
+                  {m.citations && m.citations.length > 0 && (
+                    <div className="pt-2 border-t border-slate-700/60 space-y-1">
+                      <div className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">
+                        🔗 Google Search Grounding Citations:
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {m.citations.map((c, idx) => (
+                          <a
+                            key={idx}
+                            href={c.uri}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center space-x-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[10px] border border-slate-600 underline"
+                          >
+                            <span>[{c.index}]</span>
+                            <span className="truncate max-w-[200px]">{c.title}</span>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Engine Metadata Badge */}
+                  {m.engine && (
+                    <div className="pt-1 text-[10px] text-slate-400 flex items-center justify-between border-t border-slate-800/60">
+                      <span>Engine: <strong className="text-cyan-400">{m.engine}</strong></span>
+                      <span className="italic">Human Verification Mandatory</span>
+                    </div>
+                  )}
                 </div>
                 {m.sender === 'user' && (
                   <div className="w-8 h-8 rounded-full bg-cyan-700 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow">
@@ -3265,7 +3498,7 @@
             {loading && (
               <div className="flex items-center space-x-2 text-xs font-mono text-cyan-400 bg-slate-900/60 p-3 rounded-xl border border-slate-800 w-fit">
                 <span className="animate-spin">⚙️</span>
-                <span>AI Copilot querying forensic records and compiling response...</span>
+                <span>{aiMode === 'RESEARCH_ASSISTANT' ? 'Researching external legal databases & search grounding...' : 'Querying 200,000 records & evaluating evidence confidence...'}</span>
               </div>
             )}
             <div ref={chatEndRef}></div>
@@ -3277,7 +3510,7 @@
               value={inputMsg}
               onChange={e => setInputMsg(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') handleSend(); }}
-              placeholder={`Ask AI Copilot anything about Case #${caseId}...`}
+              placeholder={aiMode === 'RESEARCH_ASSISTANT' ? 'Ask any statutory or legal research question...' : `Ask AI Copilot anything about Case #${caseId}...`}
               className="flex-1 bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs font-mono text-white outline-none"
             />
             <button
@@ -3428,28 +3661,247 @@
       );
     }
 
-    function LiveSurveillanceRoomView({ isDark }) {
-      const [sessions, setSessions] = useState([]);
+    function NetworkCameraSecurityMonitorView({ isDark, currentUser }) {
+      const [monitorTab, setMonitorTab] = useState('CAMERA'); // 'CAMERA' | 'IP_ASSETS' | 'SESSIONS'
+      
+      // Camera state machine: 'NOT_STARTED' | 'PERMISSION_REQUIRED' | 'CONNECTED' | 'ERROR' | 'STOPPED'
+      const [cameraState, setCameraState] = useState('NOT_STARTED');
+      const [cameraError, setCameraError] = useState('');
+      const [nvrConfig, setNvrConfig] = useState({ url: '', port: '554', assetId: '', status: 'NOT_CONFIGURED' });
+      const videoRef = useRef(null);
+      const streamRef = useRef(null);
+
+      // IP Intelligence & Asset Registry state
+      const [detectedIpData, setDetectedIpData] = useState(null);
+      const [isDetectingIp, setIsDetectingIp] = useState(false);
+      const [lookupIp, setLookupIp] = useState('');
+      const [lookupResult, setLookupResult] = useState(null);
+      const [isLookingUp, setIsLookingUp] = useState(false);
+      const [lookupError, setLookupError] = useState('');
+
+      // IP Intelligence & Login Geo Map state
+      const [telemetryLogs, setTelemetryLogs] = useState([]);
+      const [telemetryFilter, setTelemetryFilter] = useState('ALL'); // 'ALL' | 'SUCCESS' | 'FAILED' | 'FLAGGED'
+      const [telemetrySearch, setTelemetrySearch] = useState('');
+      const [selectedTelemetry, setSelectedTelemetry] = useState(null);
+      const [isReviewOpen, setIsReviewOpen] = useState(false);
+      const [reviewResolution, setReviewResolution] = useState('RESOLVED');
+      const [reviewNotes, setReviewNotes] = useState('');
+      const [reviewMsg, setReviewMsg] = useState('');
+      const loginMapRef = useRef(null);
+      const loginMapInstanceRef = useRef(null);
+
+      // Assets
+      const [assets, setAssets] = useState([]);
+      const [assetSearch, setAssetSearch] = useState('');
+      const [assetCategory, setAssetCategory] = useState('ALL');
+      const [isAssetModalOpen, setIsAssetModalOpen] = useState(false);
+      const [editingAsset, setEditingAsset] = useState(null);
+      const [historyAsset, setHistoryAsset] = useState(null);
+      const [assetForm, setAssetForm] = useState({
+        ip: '',
+        name: '',
+        description: '',
+        category: 'GATEWAY',
+        hostname: '',
+        networkProvider: '',
+        cameraReference: '',
+        tags: '',
+        notes: '',
+        associatedCaseId: ''
+      });
+      const [assetMsg, setAssetMsg] = useState('');
+
+      // Internal Discovery (Admin only)
+      const [discoveryCidr, setDiscoveryCidr] = useState('10.42.18.0/28');
+      const [discoveryResults, setDiscoveryResults] = useState(null);
+      const [isDiscovering, setIsDiscovering] = useState(false);
+      const [discoveryMsg, setDiscoveryMsg] = useState('');
+
+      // Sessions & Telemetry
+      const [activeSessions, setActiveSessions] = useState([]);
+      const [recentAuthLogs, setRecentAuthLogs] = useState([]);
+      const [requests, setRequests] = useState([]);
       const [activeSession, setActiveSession] = useState(null);
-      const [cameraMode, setCameraMode] = useState('DUMMY_OFFICER');
-      const [mousePos, setMousePos] = useState({ x: 320, y: 190 });
       const [viewingSeconds, setViewingSeconds] = useState(482);
+      const [mousePos, setMousePos] = useState({ x: 320, y: 190 });
       const [activeDocTab, setActiveDocTab] = useState('LEDGER');
       const [isRevoked, setIsRevoked] = useState(false);
-      const videoRef = useRef(null);
 
-      useEffect(() => {
+      const userDept = currentUser?.department || 'D001';
+      const isAdmin = currentUser?.role === 'Department Admin' || currentUser?.role === 'Security Guardian' || currentUser?.role === 'Management Overview';
+
+      // Load Assets
+      const fetchAssets = () => {
+        const token = localStorage.getItem('netrish_token');
+        fetch('/api/network/assets', {
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        })
+          .then(r => r.json())
+          .then(d => {
+            if (d.success) setAssets(d.assets || []);
+          })
+          .catch(() => {});
+      };
+
+      // Load Active Sessions & Requests
+      const fetchSessionsAndRequests = () => {
+        const token = localStorage.getItem('netrish_token');
+        fetch('/api/auth/active-sessions', {
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        })
+          .then(r => r.json())
+          .then(d => {
+            if (d.success) {
+              setActiveSessions(d.sessions || []);
+              setRecentAuthLogs(d.recentAuthEvents || []);
+            }
+          })
+          .catch(() => {});
+
         fetch('/api/erp/access-requests')
           .then(r => r.json())
           .then(d => {
             if (d.success && d.requests.length > 0) {
-              setSessions(d.requests);
-              setActiveSession(d.requests[0]);
+              setRequests(d.requests);
+              if (!activeSession) setActiveSession(d.requests[0]);
             }
-          });
-      }, []);
+          })
+          .catch(() => {});
+      };
+
+      // Load Login Telemetry
+      const fetchTelemetry = () => {
+        const token = localStorage.getItem('netrish_token');
+        const url = `/api/network/telemetry?status=${telemetryFilter}&q=${encodeURIComponent(telemetrySearch)}`;
+        fetch(url, {
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        })
+          .then(r => r.json())
+          .then(d => {
+            if (d.success) setTelemetryLogs(d.telemetry || []);
+          })
+          .catch(() => {});
+      };
 
       useEffect(() => {
+        if (monitorTab === 'LOGIN_GEO_MAP') {
+          fetchTelemetry();
+        }
+      }, [monitorTab, telemetryFilter, telemetrySearch]);
+
+      // Leaflet Map for Login Geolocation
+      useEffect(() => {
+        if (monitorTab !== 'LOGIN_GEO_MAP') {
+          if (loginMapInstanceRef.current) {
+            loginMapInstanceRef.current.remove();
+            loginMapInstanceRef.current = null;
+          }
+          return;
+        }
+
+        const timer = setTimeout(() => {
+          if (!loginMapRef.current || !window.L) return;
+          if (loginMapInstanceRef.current) {
+            loginMapInstanceRef.current.remove();
+            loginMapInstanceRef.current = null;
+          }
+
+          const map = L.map(loginMapRef.current, {
+            center: [22.5, 78.9],
+            zoom: 4.5,
+            zoomControl: true
+          });
+
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CartoDB • NETRISH Telemetry',
+            maxZoom: 18
+          }).addTo(map);
+
+          loginMapInstanceRef.current = map;
+
+          telemetryLogs.forEach(log => {
+            if (log.approximateGeo && log.approximateGeo.available && log.approximateGeo.coordinates) {
+              const [lat, lng] = log.approximateGeo.coordinates;
+              const isSuccess = log.status === 'SUCCESS';
+              const isFlagged = log.reviewStatus === 'FLAGGED_SUSPICIOUS' || log.reputation?.risk === 'HIGH RISK';
+              const color = isFlagged ? '#ef4444' : (isSuccess ? '#10b981' : '#f59e0b');
+
+              const icon = L.divIcon({
+                className: 'custom-login-marker',
+                html: `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 8px ${color};"></div>`,
+                iconSize: [14, 14],
+                iconAnchor: [7, 7]
+              });
+
+              const marker = L.marker([lat, lng], { icon }).addTo(map);
+              marker.bindPopup(`
+                <div style="font-family: monospace; font-size: 11px; color: #0f172a; min-width: 220px; line-height: 1.4;">
+                  <div style="font-weight: bold; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 4px; color: ${color};">
+                    ${isSuccess ? '✅ SUCCESSFUL AUTH' : '⚠️ FAILED ATTEMPT'} (${log.status})
+                  </div>
+                  <div><b>Officer:</b> ${log.officerName} (${log.officerId})</div>
+                  <div><b>Department:</b> ${log.departmentName || log.departmentId}</div>
+                  <div><b>Observed IP:</b> ${log.ip} (${log.classification})</div>
+                  <div><b>Browser / OS:</b> ${log.apparentBrowser} on ${log.apparentOS}</div>
+                  <div><b>Enrolled Device:</b> ${log.deviceEnrolledName}</div>
+                  <div><b>Approx. Location:</b> ${log.approximateGeo.city || 'Unknown'}, ${log.approximateGeo.country || 'India'}</div>
+                  <div style="margin-top: 6px; padding-top: 4px; border-top: 1px dashed #cbd5e1; font-size: 10px; color: #64748b;">
+                    <i>Approximate network routing. Does not identify physical street address.</i>
+                  </div>
+                </div>
+              `);
+            }
+          });
+        }, 150);
+
+        return () => clearTimeout(timer);
+      }, [monitorTab, telemetryLogs]);
+
+      const handleReviewSubmit = (e) => {
+        e.preventDefault();
+        if (!selectedTelemetry) return;
+        setReviewMsg('');
+        const token = localStorage.getItem('netrish_token');
+        fetch(`/api/network/telemetry/${selectedTelemetry.id}/review`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({
+            resolution: reviewResolution,
+            notes: reviewNotes
+          })
+        })
+          .then(r => r.json())
+          .then(d => {
+            if (d.success) {
+              setReviewMsg('Review resolution recorded successfully.');
+              fetchTelemetry();
+              setTimeout(() => {
+                setIsReviewOpen(false);
+                setSelectedTelemetry(null);
+                setReviewMsg('');
+              }, 1200);
+            } else {
+              setReviewMsg(d.error || 'Failed to submit review');
+            }
+          })
+          .catch(() => {
+            setReviewMsg('Server connection error during review.');
+          });
+      };
+
+      const handleExportTelemetry = () => {
+        const token = localStorage.getItem('netrish_token');
+        window.open('/api/network/telemetry/export?token=' + (token || ''), '_blank');
+      };
+
+      useEffect(() => {
+        fetchAssets();
+        fetchSessionsAndRequests();
+
         const timer = setInterval(() => {
           setViewingSeconds(prev => prev + 1);
           setMousePos({
@@ -3457,29 +3909,179 @@
             y: Math.floor(150 + Math.cos(Date.now() / 1700) * 75)
           });
         }, 1000);
-        return () => clearInterval(timer);
+
+        return () => {
+          clearInterval(timer);
+          stopCamera();
+        };
       }, []);
 
-      const startRealCamera = async () => {
+      // Real Camera Control
+      const startCamera = async () => {
+        setCameraError('');
+        setCameraState('PERMISSION_REQUIRED');
         try {
-          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-            setCameraMode('REAL_WEBCAM');
-            if (videoRef.current) {
-              videoRef.current.srcObject = stream;
-            }
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            setCameraState('ERROR');
+            setCameraError('Webcam API is not supported in this browser.');
+            return;
           }
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          streamRef.current = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+          }
+          setCameraState('CONNECTED');
         } catch (err) {
-          alert('Webcam access was denied. Continuing with tactical officer surveillance feed.');
+          setCameraState('ERROR');
+          setCameraError(err.name === 'NotAllowedError' ? 'Camera permission was denied by the user.' : err.message);
         }
+      };
+
+      const stopCamera = () => {
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach(track => track.stop());
+          streamRef.current = null;
+        }
+        if (videoRef.current) {
+          videoRef.current.srcObject = null;
+        }
+        setCameraState('STOPPED');
+      };
+
+      // Detect Connection IP
+      const handleDetectMyIp = () => {
+        setIsDetectingIp(true);
+        fetch('/api/network/my-ip')
+          .then(r => r.json())
+          .then(d => {
+            setIsDetectingIp(false);
+            if (d.success) setDetectedIpData(d);
+          })
+          .catch(() => {
+            setIsDetectingIp(false);
+          });
+      };
+
+      // Lookup IP
+      const handleLookup = (e) => {
+        if (e) e.preventDefault();
+        if (!lookupIp.trim()) return;
+        setIsLookingUp(true);
+        setLookupError('');
+        setLookupResult(null);
+
+        const token = localStorage.getItem('netrish_token');
+        fetch('/api/network/lookup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ ip: lookupIp.trim() })
+        })
+          .then(r => r.json())
+          .then(d => {
+            setIsLookingUp(false);
+            if (d.success) {
+              setLookupResult(d.data);
+            } else {
+              setLookupError(d.error || 'Lookup failed');
+            }
+          })
+          .catch(() => {
+            setIsLookingUp(false);
+            setLookupError('Server connection error during IP lookup.');
+          });
+      };
+
+      // Save/Edit Asset
+      const handleSaveAsset = (e) => {
+        e.preventDefault();
+        setAssetMsg('');
+        const token = localStorage.getItem('netrish_token');
+        const url = editingAsset ? `/api/network/assets/${editingAsset.id}` : '/api/network/assets';
+        const method = editingAsset ? 'PUT' : 'POST';
+
+        fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({
+            ...assetForm,
+            departmentId: userDept
+          })
+        })
+          .then(r => r.json())
+          .then(d => {
+            if (d.success) {
+              setAssetMsg(`✅ ${d.message}`);
+              fetchAssets();
+              setTimeout(() => {
+                setIsAssetModalOpen(false);
+                setEditingAsset(null);
+                setAssetMsg('');
+              }, 1200);
+            } else {
+              setAssetMsg(`❌ ${d.error}`);
+            }
+          })
+          .catch(() => setAssetMsg('❌ Failed to save asset to registry.'));
+      };
+
+      const handleDeactivateAsset = (id) => {
+        if (!confirm(`Mark asset ${id} inactive?`)) return;
+        const token = localStorage.getItem('netrish_token');
+        fetch(`/api/network/assets/${id}`, {
+          method: 'DELETE',
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        })
+          .then(r => r.json())
+          .then(() => fetchAssets());
+      };
+
+      // Scoped Discovery
+      const handleRunDiscovery = (e) => {
+        e.preventDefault();
+        setIsDiscovering(true);
+        setDiscoveryMsg('');
+        const token = localStorage.getItem('netrish_token');
+
+        fetch('/api/network/discover', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ cidr: discoveryCidr })
+        })
+          .then(r => r.json())
+          .then(d => {
+            setIsDiscovering(false);
+            if (d.success) {
+              setDiscoveryResults(d);
+            } else {
+              setDiscoveryMsg(`❌ ${d.error}`);
+            }
+          })
+          .catch(() => {
+            setIsDiscovering(false);
+            setDiscoveryMsg('❌ Discovery scan error.');
+          });
       };
 
       const handleEmergencyRevoke = (id) => {
         setIsRevoked(true);
+        const token = localStorage.getItem('netrish_token');
         fetch(`/api/erp/access-requests/${id}/revoke`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ officer: { id: 'ADMIN-007', name: 'SP Neha Sharma' } })
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ officer: { id: currentUser?.id || 'ADMIN-007', name: currentUser?.name || 'SP Neha Sharma' } })
         });
       };
 
@@ -3489,251 +4091,1256 @@
         return `${m}m ${s}s`;
       };
 
+      const cardBg = isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm';
+      const innerBg = isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200';
+
       return (
         <div className="p-6 space-y-6 max-w-7xl mx-auto font-sans">
-          <div className="border-b pb-4 border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          {/* Header & Title */}
+          <div className="border-b pb-4 border-slate-700/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-xl">📹</span>
-                <h1 className="text-xl font-black font-mono tracking-wide text-red-400">
-                  LIVE SURVEILLANCE & ACTIVE SCREEN MONITOR
+                <span className="text-2xl">📡</span>
+                <h1 className="text-xl font-black font-mono tracking-wide text-cyan-400">
+                  NETWORK & CAMERA SECURITY MONITOR
                 </h1>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-red-950 text-red-400 border border-red-800 animate-pulse">
-                  ● ACTIVE RECORDING
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950 text-cyan-400 border border-cyan-800">
+                  NATIONAL GRID INTERFACE
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-1 font-mono">
-                Real-Time Screen Activity Mirroring, Live Officer Video Surveillance, and Emergency Disconnect Kill Switch.
+                Department Network Assets, Forensic IP Intelligence, WebRTC Camera Console & Active Surveillance Sessions.
               </p>
             </div>
 
-            <div className="flex items-center space-x-3 font-mono text-xs">
-              {cameraMode === 'DUMMY_OFFICER' ? (
-                <button
-                  onClick={startRealCamera}
-                  className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition"
-                >
-                  Enable Real Webcam 📷
-                </button>
-              ) : (
-                <button
-                  onClick={() => setCameraMode('DUMMY_OFFICER')}
-                  className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition"
-                >
-                  Switch to Remote Officer Cam 👮‍♂️
-                </button>
-              )}
+            {/* Top Tab Bar */}
+            <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 space-x-1 shrink-0 font-mono text-xs overflow-x-auto">
+              <button
+                onClick={() => setMonitorTab('CAMERA')}
+                className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center space-x-1.5 ${
+                  monitorTab === 'CAMERA' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>📹</span>
+                <span>CAMERA MONITOR</span>
+              </button>
+              <button
+                onClick={() => setMonitorTab('LOGIN_GEO_MAP')}
+                className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center space-x-1.5 ${
+                  monitorTab === 'LOGIN_GEO_MAP' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🗺️</span>
+                <span>IP INTELLIGENCE & LOGIN GEO MAP</span>
+              </button>
+              <button
+                onClick={() => setMonitorTab('IP_ASSETS')}
+                className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center space-x-1.5 ${
+                  monitorTab === 'IP_ASSETS' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🌐</span>
+                <span>ASSET REGISTRY</span>
+              </button>
+              <button
+                onClick={() => setMonitorTab('SESSIONS')}
+                className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center space-x-1.5 ${
+                  monitorTab === 'SESSIONS' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🖥️</span>
+                <span>SESSIONS & AUDIT</span>
+              </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-              <div className="p-3 bg-[#0a1224] border-b border-slate-800 flex items-center justify-between font-mono text-xs">
-                <div className="flex items-center space-x-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-                  <span className="font-bold text-white">REMOTE SCREEN MIRROR</span>
-                  <span className="text-slate-500">•</span>
-                  <span className="text-cyan-400">{activeSession?.officerIp || '10.42.18.91'}</span>
-                </div>
-                <div className="text-[10px] text-slate-400">
-                  File: GST-ITC-RECON-C00228.pdf
-                </div>
-              </div>
+          {/* TAB 1: CAMERA & SURVEILLANCE */}
+          {monitorTab === 'CAMERA' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Panel 1: WebRTC Officer Camera Console */}
+                <div className={`rounded-2xl border overflow-hidden shadow-2xl flex flex-col ${cardBg}`}>
+                  <div className={`p-3.5 border-b flex items-center justify-between font-mono text-xs ${isDark ? 'bg-[#0a1224] border-slate-800' : 'bg-slate-100 border-slate-200'}`}>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                      <span className="font-bold">WEBRTC LOCAL CAMERA PREVIEW</span>
+                    </div>
 
-              <div className="h-80 bg-[#060b16] relative overflow-hidden flex flex-col p-4 watermark-overlay">
-                {isRevoked ? (
-                  <div className="absolute inset-0 bg-red-950/95 flex flex-col items-center justify-center text-center p-6 space-y-3 z-30">
-                    <span className="text-5xl">🚨</span>
-                    <h3 className="text-xl font-mono font-black text-white">ACCESS PERMANENTLY REVOKED</h3>
-                    <p className="text-xs font-mono text-red-300 max-w-sm">
-                      Workstation session terminated by Custodian Department.
-                    </p>
+                    {/* Camera State Badges */}
+                    <div>
+                      {cameraState === 'NOT_STARTED' && (
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400 border border-slate-700">
+                          ⚫ NOT_STARTED
+                        </span>
+                      )}
+                      {cameraState === 'PERMISSION_REQUIRED' && (
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800 animate-pulse">
+                          🟡 PERMISSION_REQUIRED
+                        </span>
+                      )}
+                      {cameraState === 'CONNECTED' && (
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold">
+                          🟢 CONNECTED
+                        </span>
+                      )}
+                      {cameraState === 'STOPPED' && (
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700">
+                          ⏹️ STOPPED
+                        </span>
+                      )}
+                      {cameraState === 'ERROR' && (
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-red-950 text-red-300 border border-red-800">
+                          🔴 ERROR
+                        </span>
+                      )}
+                    </div>
                   </div>
-                ) : (
-                  <>
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 rotate-[-25deg] select-none">
-                      <div className="text-center font-mono font-black text-2xl text-red-500 tracking-widest leading-loose">
-                        NETRISH CONFIDENTIAL<br />
-                        OFFICER: {activeSession?.requestingOfficer || 'INSP. VIKRAM'}<br />
-                        IP: {activeSession?.officerIp || '10.42.18.91'}
-                      </div>
-                    </div>
 
-                    <div className="bg-slate-900 border border-slate-700 rounded-lg p-3 space-y-2 font-mono text-xs relative z-10 shadow-lg flex-1 flex flex-col">
-                      <div className="flex justify-between items-center border-b border-slate-800 pb-1.5">
-                        <span className="text-cyan-400 font-bold">CASE #{activeSession?.caseId || 'C00228'} — FINANCIAL FORENSICS</span>
-                        <span className="text-emerald-400 text-[10px]">● INSPECTING</span>
-                      </div>
-
-                      <div className="flex gap-2 pt-1 border-b border-slate-800 pb-1 text-[10px]">
-                        <button
-                          onClick={() => setActiveDocTab('LEDGER')}
-                          className={`px-2 py-0.5 rounded ${activeDocTab === 'LEDGER' ? 'bg-cyan-600 text-white' : 'text-slate-400'}`}
-                        >
-                          GST ITC Ledger
-                        </button>
-                        <button
-                          onClick={() => setActiveDocTab('EWAY')}
-                          className={`px-2 py-0.5 rounded ${activeDocTab === 'EWAY' ? 'bg-cyan-600 text-white' : 'text-slate-400'}`}
-                        >
-                          E-Way Bill Manifest
-                        </button>
-                        <button
-                          onClick={() => setActiveDocTab('AADHAAR')}
-                          className={`px-2 py-0.5 rounded ${activeDocTab === 'AADHAAR' ? 'bg-cyan-600 text-white' : 'text-slate-400'}`}
-                        >
-                          Aadhaar KYC Card
-                        </button>
-                      </div>
-
-                      <div className="space-y-1.5 text-[11px] text-slate-300 pt-1 flex-1 overflow-hidden">
-                        {activeDocTab === 'LEDGER' && (
-                          <div className="space-y-1">
-                            <div className="text-amber-300 font-bold">Taxpayer: Apex Global Pvt Ltd (GSTIN: 07AAACG9921K1ZM)</div>
-                            <div>Transaction #TXN-991: <strong className="text-emerald-400">₹85,627.73</strong> (HDFC A/C ••8831)</div>
-                            <div>Bogus Input Tax Credit: <span className="text-red-400 font-bold">₹1,45,000 FLAGGED</span></div>
-                            <div className="text-[10px] text-slate-400">Status: Suspicious Hawala Cash Routing via Burner SIM</div>
-                          </div>
-                        )}
-                        {activeDocTab === 'EWAY' && (
-                          <div className="space-y-1">
-                            <div>E-Way Bill No: <strong>EWB-2026-881920</strong></div>
-                            <div>Vehicle Reg: <strong className="text-cyan-300">DL-01-AB-4921 (Toyota Fortuner)</strong></div>
-                            <div>Consignment: Electronic Components • Fake Consignee Address</div>
-                          </div>
-                        )}
-                        {activeDocTab === 'AADHAAR' && (
-                          <div className="space-y-1">
-                            <div>Name: <strong>Vikram Sen (Person_0732)</strong></div>
-                            <div>Aadhaar Ref: <strong>XXXX-XXXX-0732</strong></div>
-                            <div>Biometric Match: <span className="text-emerald-400 font-bold">99.2% Confirmed (UIDAI Portal)</span></div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
-                      className="absolute z-20 transition-transform duration-300 pointer-events-none flex items-center space-x-1"
-                    >
-                      <span className="text-lg">↖️</span>
-                      <span className="text-[9px] font-mono bg-black/90 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500">
-                        Officer Cursor
-                      </span>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className="p-3 bg-[#080e1c] border-t border-slate-800 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400">Activity: Inspecting Ledger Table Rows</span>
-                <span className="text-cyan-400">DELL-OPTIPLEX-NCR</span>
-              </div>
-            </div>
-
-            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-              <div className="p-3 bg-[#0a1224] border-b border-slate-800 flex items-center justify-between font-mono text-xs">
-                <div className="flex items-center space-x-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
-                  <span className="font-bold text-white">OFFICER WEBCAM SURVEILLANCE FEED</span>
-                </div>
-                <div className="text-red-400 font-bold">
-                  ● REC 00:{Math.floor(viewingSeconds / 60)}:{viewingSeconds % 60}
-                </div>
-              </div>
-
-              <div className="h-80 bg-black relative overflow-hidden flex items-center justify-center">
-                {cameraMode === 'REAL_WEBCAM' ? (
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-[#050811] relative flex items-center justify-center overflow-hidden">
-                    <img
-                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600"
-                      alt="Officer Surveillance Video"
-                      className="w-full h-full object-cover opacity-85 filter contrast-125 brightness-95"
+                  <div className="h-80 bg-black relative overflow-hidden flex items-center justify-center">
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
+                      muted
+                      className={`w-full h-full object-cover ${cameraState === 'CONNECTED' ? 'block' : 'hidden'}`}
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none"></div>
-
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-52 border-2 border-emerald-400/90 rounded-xl pointer-events-none shadow-[0_0_20px_rgba(52,211,153,0.4)]">
-                      <div className="absolute -top-6 left-0 bg-emerald-950/90 border border-emerald-500 text-emerald-300 font-mono text-[9px] px-2 py-0.5 rounded">
-                        MATCH: 99.4%
+                    {cameraState !== 'CONNECTED' && (
+                      <div className="text-center p-6 space-y-3 font-mono">
+                        <span className="text-5xl block">📷</span>
+                        <div className="text-sm font-bold text-slate-300">
+                          {cameraState === 'PERMISSION_REQUIRED' ? 'Awaiting camera permission in browser...' :
+                            cameraState === 'ERROR' ? `Camera Unavailable: ${cameraError}` :
+                            cameraState === 'STOPPED' ? 'Camera Stopped • Hardware media tracks released' :
+                            'Local Officer Camera Feed Idle'}
+                        </div>
+                        <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                          Click below to request secure browser camera access for forensic verification.
+                        </p>
                       </div>
-                      <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-emerald-400"></div>
-                      <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-emerald-400"></div>
-                      <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-emerald-400"></div>
-                      <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-emerald-400"></div>
+                    )}
+
+                    {cameraState === 'CONNECTED' && (
+                      <div className="absolute top-3 left-3 bg-black/80 border border-slate-800 p-2 rounded text-[10px] font-mono space-y-0.5 pointer-events-none">
+                        <div className="text-cyan-400 font-bold">OFFICER TERMINAL WEBCAM</div>
+                        <div className="text-slate-200">{currentUser?.name || 'Authorized Officer'}</div>
+                        <div className="text-emerald-400">FPS: 30 • Tracks: 1 Active Video Track</div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className={`p-3.5 border-t flex items-center justify-between text-xs font-mono ${isDark ? 'bg-[#080e1c] border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                    <div className="text-slate-400">
+                      Controls:
                     </div>
+                    <div className="flex space-x-2">
+                      {cameraState !== 'CONNECTED' ? (
+                        <button
+                          onClick={startCamera}
+                          className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold transition shadow flex items-center space-x-1.5"
+                        >
+                          <span>▶</span>
+                          <span>Start Camera</span>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={stopCamera}
+                          className="px-3.5 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded-lg font-bold transition shadow flex items-center space-x-1.5"
+                        >
+                          <span>⏹</span>
+                          <span>Stop Camera</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Panel 2: CCTV / NVR Integration */}
+                <div className={`rounded-2xl border overflow-hidden shadow-2xl flex flex-col ${cardBg}`}>
+                  <div className={`p-3.5 border-b flex items-center justify-between font-mono text-xs ${isDark ? 'bg-[#0a1224] border-slate-800' : 'bg-slate-100 border-slate-200'}`}>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                      <span className="font-bold">DEPARTMENT CCTV & NVR INTEGRATION</span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800 font-bold">
+                      ⚠️ NOT_CONFIGURED
+                    </span>
+                  </div>
+
+                  <div className="h-80 bg-[#070b14] relative p-5 flex flex-col justify-between font-mono text-xs">
+                    <div className="space-y-3">
+                      <div className="p-3 rounded-xl border border-amber-500/30 bg-amber-950/20 text-amber-200 text-xs">
+                        <strong>Standby Pattern:</strong> No external RTSP/HLS stream endpoint configured for this terminal. CCTV stream will only display when an authorized video provider or camera IP asset is connected.
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-slate-400 font-bold block">ASSOCIATE WITH DEPARTMENT CAMERA IP ASSET</label>
+                        <select
+                          value={nvrConfig.assetId}
+                          onChange={e => setNvrConfig({ ...nvrConfig, assetId: e.target.value })}
+                          className={`w-full p-2 rounded-lg border outline-none font-mono text-xs ${
+                            isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                          }`}
+                        >
+                          <option value="">-- Select Registered Camera Asset --</option>
+                          {assets.filter(a => a.category === 'NVR_CAMERA').map(a => (
+                            <option key={a.id} value={a.id}>{a.name} ({a.ip} • {a.cameraReference || 'NVR'})</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="col-span-2">
+                          <label className="text-slate-400 block text-[10px]">RTSP STREAM URL</label>
+                          <input
+                            type="text"
+                            placeholder="rtsp://10.42.18.105:554/live/stream1"
+                            value={nvrConfig.url}
+                            onChange={e => setNvrConfig({ ...nvrConfig, url: e.target.value })}
+                            className={`w-full p-1.5 rounded border text-[11px] outline-none ${
+                              isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                            }`}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-slate-400 block text-[10px]">PORT</label>
+                          <input
+                            type="text"
+                            value={nvrConfig.port}
+                            onChange={e => setNvrConfig({ ...nvrConfig, port: e.target.value })}
+                            className={`w-full p-1.5 rounded border text-[11px] outline-none ${
+                              isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                            }`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => alert('CCTV stream endpoint saved to department configuration. Live hardware verification required on secure LAN.')}
+                      className="w-full py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-lg uppercase tracking-wider"
+                    >
+                      Save Camera Stream Configuration
+                    </button>
+                  </div>
+
+                  <div className={`p-3.5 border-t flex items-center justify-between text-xs font-mono ${isDark ? 'bg-[#080e1c] border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                    <span className="text-slate-400">Protocol: RTSP / ONVIF Profile S</span>
+                    <span className="text-amber-400">Standby Pattern Active</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Remote Screen Mirror Activity Log */}
+              <div className={`p-5 rounded-2xl border ${cardBg} font-mono text-xs space-y-4`}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                  <div>
+                    <h3 className="font-bold text-sm">SURVEILLANCE TELEMETRY & CLEARANCE AUDIT</h3>
+                    <p className="text-[11px] text-slate-400">Live operational monitoring of active cross-agency cases</p>
+                  </div>
+                  {activeSession && !isRevoked && (
+                    <button
+                      onClick={() => handleEmergencyRevoke(activeSession.id)}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl transition shadow"
+                    >
+                      🚨 EMERGENCY REVOKE CLEARANCE
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className={`p-3 rounded-xl border ${innerBg}`}>
+                    <span className="text-slate-500 block text-[10px]">TOTAL VIEWING DURATION:</span>
+                    <strong className="text-cyan-400 text-sm">{formatTime(viewingSeconds)}</strong>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Focusing on Case #{activeSession?.caseId || 'C00228'}</p>
+                  </div>
+                  <div className={`p-3 rounded-xl border ${innerBg}`}>
+                    <span className="text-slate-500 block text-[10px]">CURRENT TARGET SUSPECT:</span>
+                    <strong className="text-amber-400 text-sm">{activeSession?.suspectIdentifier || 'Aadhaar: 4921-8842-1092'}</strong>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Target Dept: {activeSession?.targetDeptName || 'GST Intelligence'}</p>
+                  </div>
+                  <div className={`p-3 rounded-xl border ${innerBg}`}>
+                    <span className="text-slate-500 block text-[10px]">SECURITY AUDIT STATE:</span>
+                    <strong className="text-emerald-400 text-sm">Cryptographic Chain Verified</strong>
+                    <p className="text-[10px] text-slate-400 mt-0.5">All actions recorded into SHA-256 Ledger</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: IP INTELLIGENCE & LOGIN GEO MAP */}
+          {monitorTab === 'LOGIN_GEO_MAP' && (
+            <div className="space-y-6 font-mono">
+              {/* KPI Metrics */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className={`p-4 rounded-xl border ${cardBg}`}>
+                  <span className="text-[10px] text-slate-400 block uppercase">Logins Logged</span>
+                  <div className="text-2xl font-black text-cyan-400 mt-1">{telemetryLogs.length}</div>
+                  <span className="text-[10px] text-slate-500">Persistent disk ledger</span>
+                </div>
+                <div className={`p-4 rounded-xl border ${cardBg}`}>
+                  <span className="text-[10px] text-slate-400 block uppercase">Successful Auth</span>
+                  <div className="text-2xl font-black text-emerald-400 mt-1">
+                    {telemetryLogs.filter(l => l.status === 'SUCCESS').length}
+                  </div>
+                  <span className="text-[10px] text-emerald-500/80">Verified Officer Sessions</span>
+                </div>
+                <div className={`p-4 rounded-xl border ${cardBg}`}>
+                  <span className="text-[10px] text-slate-400 block uppercase">Failed Attempts</span>
+                  <div className="text-2xl font-black text-amber-400 mt-1">
+                    {telemetryLogs.filter(l => l.status !== 'SUCCESS').length}
+                  </div>
+                  <span className="text-[10px] text-amber-500/80">Credential / PIN / CAPTCHA</span>
+                </div>
+                <div className={`p-4 rounded-xl border ${cardBg}`}>
+                  <span className="text-[10px] text-slate-400 block uppercase">Flagged Suspicious</span>
+                  <div className="text-2xl font-black text-red-400 mt-1">
+                    {telemetryLogs.filter(l => l.reviewStatus === 'FLAGGED_SUSPICIOUS' || l.reputation?.risk === 'HIGH RISK').length}
+                  </div>
+                  <span className="text-[10px] text-red-500/80">Requires Admin Review</span>
+                </div>
+              </div>
+
+              {/* Filter & Search Bar */}
+              <div className={`p-4 rounded-xl border ${cardBg} flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-xs`}>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-slate-400 text-[11px]">FILTER STATUS:</span>
+                  {['ALL', 'SUCCESS', 'FAILED', 'FLAGGED'].map(st => (
+                    <button
+                      key={st}
+                      onClick={() => setTelemetryFilter(st)}
+                      className={`px-3 py-1 rounded-lg font-bold transition text-[11px] ${
+                        telemetryFilter === st
+                          ? 'bg-cyan-600 text-white shadow'
+                          : 'bg-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {st}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    value={telemetrySearch}
+                    onChange={e => setTelemetrySearch(e.target.value)}
+                    placeholder="Search officer, IP, browser, OS..."
+                    className="bg-slate-950 border border-slate-700 text-white px-3 py-1.5 rounded-lg outline-none text-xs w-60"
+                  />
+                  <button
+                    onClick={handleExportTelemetry}
+                    className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 rounded-lg font-bold transition flex items-center space-x-1 shrink-0"
+                  >
+                    <span>📥</span>
+                    <span>EXPORT AUDIT REPORT</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Map & Provider Intelligence Split */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Left (2 cols): Interactive Geo Map */}
+                <div className={`lg:col-span-2 p-4 rounded-2xl border ${cardBg} space-y-3`}>
+                  <div className="flex items-center justify-between border-b pb-2.5 border-slate-800">
+                    <div>
+                      <h3 className="font-bold text-sm text-cyan-400">LOGIN GEOLOCATION RADAR</h3>
+                      <p className="text-[11px] text-slate-400">Approximate geographical routing of observed authentications</p>
+                    </div>
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700">
+                      Leaflet & OpenStreetMap Tiles
+                    </span>
+                  </div>
+
+                  <div className="h-96 w-full rounded-xl overflow-hidden border border-slate-800 bg-[#090e1c] relative">
+                    <div ref={loginMapRef} className="w-full h-full"></div>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-[10px] text-slate-400 leading-relaxed flex items-start space-x-2">
+                    <span className="text-amber-400 text-xs">⚠️</span>
+                    <div>
+                      <strong>Technical Disclaimer:</strong> Public IP addresses indicate network routing points and approximate ISP gateways. Geolocation does not represent verified physical street addresses or individuals. Hardware device names reflect enrolled department assets.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right (1 col): IP Threat & Provider Diagnostics */}
+                <div className={`p-4 rounded-2xl border ${cardBg} space-y-4 text-xs`}>
+                  <div className="border-b pb-2.5 border-slate-800">
+                    <h3 className="font-bold text-sm text-cyan-400">THREAT INTELLIGENCE & PROVIDERS</h3>
+                    <p className="text-[11px] text-slate-400">Active reputation feeds & routing safeguards</p>
+                  </div>
+
+                  {/* AbuseIPDB Integration Status */}
+                  <div className={`p-3 rounded-xl border ${innerBg} space-y-1`}>
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-slate-200">AbuseIPDB Threat Feed</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">
+                        v2 API Adapter
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400">
+                      Inspects public IP reputation against 90-day global abusive reporting ledgers.
+                    </p>
+                    <div className="text-[10px] text-slate-500 pt-1">
+                      Env key: <code className="text-cyan-400 font-bold">ABUSEIPDB_API_KEY</code>
+                    </div>
+                  </div>
+
+                  {/* IPinfo Geolocation Provider */}
+                  <div className={`p-3 rounded-xl border ${innerBg} space-y-1`}>
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-slate-200">IP Geolocation Feed</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] bg-purple-950 text-purple-300 border border-purple-800">
+                        IPinfo Provider
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400">
+                      Resolves city, region, coordinates, and ASN for authorized public addresses.
+                    </p>
+                    <div className="text-[10px] text-slate-500 pt-1">
+                      Env token: <code className="text-purple-400 font-bold">IPINFO_TOKEN</code>
+                    </div>
+                  </div>
+
+                  {/* RFC 1918 Private Safeguard */}
+                  <div className={`p-3 rounded-xl border ${innerBg} space-y-1`}>
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-slate-200">RFC 1918 & Loopback Policy</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800">
+                        Enforced
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400">
+                      Private, carrier-grade NAT, and loopback IPs are classified locally without leaking internal topology to external APIs.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Telemetry Log Table */}
+              <div className={`p-4 rounded-2xl border ${cardBg} space-y-3`}>
+                <div className="flex justify-between items-center border-b pb-2.5 border-slate-800">
+                  <div>
+                    <h3 className="font-bold text-sm text-cyan-400">OFFICER LOGIN TELEMETRY LEDGER</h3>
+                    <p className="text-[11px] text-slate-400">Server-observed network telemetry, apparent browsers, and enrolled hardware</p>
+                  </div>
+                  <span className="text-[11px] text-slate-400">
+                    Showing {telemetryLogs.length} events
+                  </span>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="border-b border-slate-800 text-slate-400 font-bold text-[10px] uppercase">
+                        <th className="py-2.5 px-3">Timestamp</th>
+                        <th className="py-2.5 px-3">Status</th>
+                        <th className="py-2.5 px-3">Officer</th>
+                        <th className="py-2.5 px-3">Department</th>
+                        <th className="py-2.5 px-3">Observed IP</th>
+                        <th className="py-2.5 px-3">Apparent Browser / OS</th>
+                        <th className="py-2.5 px-3">Enrolled Device</th>
+                        <th className="py-2.5 px-3">Approx. Location</th>
+                        <th className="py-2.5 px-3">Risk Signal</th>
+                        <th className="py-2.5 px-3 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800/60">
+                      {telemetryLogs.map(log => {
+                        const isSuccess = log.status === 'SUCCESS';
+                        const isFlagged = log.reviewStatus === 'FLAGGED_SUSPICIOUS' || log.reputation?.risk === 'HIGH RISK';
+
+                        return (
+                          <tr key={log.id} className="hover:bg-slate-800/40 transition">
+                            <td className="py-2 px-3 text-slate-400 text-[11px]">
+                              {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                              <span className="block text-[9px] text-slate-500">{new Date(log.timestamp).toLocaleDateString()}</span>
+                            </td>
+                            <td className="py-2 px-3">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                isSuccess
+                                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                                  : 'bg-red-950 text-red-300 border border-red-800'
+                              }`}>
+                                {log.status}
+                              </span>
+                            </td>
+                            <td className="py-2 px-3">
+                              <span className="font-bold text-slate-200">{log.officerName}</span>
+                              <span className="block text-[10px] text-slate-400">{log.officerId}</span>
+                            </td>
+                            <td className="py-2 px-3 text-slate-300 text-[11px]">
+                              {log.departmentName || log.departmentId}
+                            </td>
+                            <td className="py-2 px-3 font-mono">
+                              <span className="text-cyan-300 font-bold">{log.ip}</span>
+                              <span className="block text-[9px] text-slate-400">{log.classification}</span>
+                            </td>
+                            <td className="py-2 px-3 text-[11px]">
+                              <span className="text-slate-200">{log.apparentBrowser}</span>
+                              <span className="block text-[10px] text-slate-400">on {log.apparentOS}</span>
+                            </td>
+                            <td className="py-2 px-3 text-[11px]">
+                              <span className={log.isEnrolledDevice ? 'text-cyan-400 font-bold' : 'text-slate-400 italic'}>
+                                {log.deviceEnrolledName}
+                              </span>
+                            </td>
+                            <td className="py-2 px-3 text-[11px]">
+                              {log.approximateGeo && log.approximateGeo.available ? (
+                                <span className="text-emerald-400 font-bold">
+                                  {log.approximateGeo.city}, {log.approximateGeo.country}
+                                </span>
+                              ) : (
+                                <span className="text-slate-500 italic">Location unavailable</span>
+                              )}
+                            </td>
+                            <td className="py-2 px-3">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                isFlagged
+                                  ? 'bg-red-950 text-red-300 border border-red-800 animate-pulse'
+                                  : log.reputation?.risk === 'REVIEW REQUIRED'
+                                    ? 'bg-amber-950 text-amber-300 border border-amber-800'
+                                    : 'bg-slate-800 text-slate-300 border border-slate-700'
+                              }`}>
+                                {log.reputation?.risk || 'LOW RISK'}
+                              </span>
+                            </td>
+                            <td className="py-2 px-3 text-right">
+                              <button
+                                onClick={() => {
+                                  setSelectedTelemetry(log);
+                                  setIsReviewOpen(true);
+                                }}
+                                className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 rounded font-bold transition text-[11px] border border-slate-700"
+                              >
+                                INSPECT
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {telemetryLogs.length === 0 && (
+                        <tr>
+                          <td colSpan="10" className="py-6 text-center text-slate-500">
+                            No telemetry records match the current filter.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Modal: Telemetry Details & Admin Review */}
+              {isReviewOpen && selectedTelemetry && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[130] p-4 text-xs font-mono">
+                  <div className="max-w-2xl w-full bg-[#0b1329] border border-cyan-500/40 rounded-2xl p-6 shadow-2xl text-white space-y-4">
+                    <div className="flex justify-between items-center border-b pb-3 border-slate-700">
+                      <div>
+                        <h3 className="font-bold text-sm text-cyan-400">LOGIN TELEMETRY INSPECTION: {selectedTelemetry.id}</h3>
+                        <p className="text-[11px] text-slate-400">Timestamp: {new Date(selectedTelemetry.timestamp).toLocaleString()}</p>
+                      </div>
+                      <button onClick={() => setIsReviewOpen(false)} className="text-slate-400 hover:text-white text-lg">✕</button>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 text-[11px]">
+                      <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
+                        <span className="text-slate-500 block text-[10px]">OFFICER IDENTIFIER:</span>
+                        <strong className="text-slate-200">{selectedTelemetry.officerName}</strong>
+                        <span className="block text-cyan-400">{selectedTelemetry.officerId}</span>
+                      </div>
+                      <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
+                        <span className="text-slate-500 block text-[10px]">DEPARTMENT JURISDICTION:</span>
+                        <strong className="text-slate-200">{selectedTelemetry.departmentName}</strong>
+                        <span className="block text-slate-400">Code: {selectedTelemetry.departmentId}</span>
+                      </div>
+                      <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
+                        <span className="text-slate-500 block text-[10px]">NETWORK ADDRESS & CLASS:</span>
+                        <strong className="text-cyan-300 font-mono">{selectedTelemetry.ip}</strong>
+                        <span className="block text-slate-400">{selectedTelemetry.classificationDesc || selectedTelemetry.classification}</span>
+                      </div>
+                      <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
+                        <span className="text-slate-500 block text-[10px]">APPARENT USER-AGENT:</span>
+                        <strong className="text-slate-200">{selectedTelemetry.apparentBrowser}</strong>
+                        <span className="block text-slate-400">on {selectedTelemetry.apparentOS}</span>
+                      </div>
+                      <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
+                        <span className="text-slate-500 block text-[10px]">ENROLLED DEVICE REGISTRY:</span>
+                        <strong className={selectedTelemetry.isEnrolledDevice ? 'text-cyan-400' : 'text-slate-400 italic'}>
+                          {selectedTelemetry.deviceEnrolledName}
+                        </strong>
+                        <span className="block text-[10px] text-slate-500">
+                          {selectedTelemetry.isEnrolledDevice ? 'Verified Hardware' : 'Non-allowlisted IP'}
+                        </span>
+                      </div>
+                      <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
+                        <span className="text-slate-500 block text-[10px]">APPROXIMATE LOCATION:</span>
+                        <strong className="text-emerald-400">
+                          {selectedTelemetry.approximateGeo?.city || 'Unavailable'}, {selectedTelemetry.approximateGeo?.country || ''}
+                        </strong>
+                        <span className="block text-[9px] text-slate-400">{selectedTelemetry.approximateGeo?.note}</span>
+                      </div>
+                    </div>
+
+                    {/* Threat Intelligence Result */}
+                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                      <div className="flex justify-between items-center text-[11px]">
+                        <span className="font-bold text-slate-300">THREAT REPUTATION EVALUATION:</span>
+                        <span className="font-bold text-cyan-400">{selectedTelemetry.reputation?.risk || 'LOW RISK'}</span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 leading-relaxed">
+                        {selectedTelemetry.reputation?.note || 'Standard activity within departmental risk tolerance.'}
+                      </p>
+                    </div>
+
+                    {/* Administrative Review Form */}
+                    {isAdmin ? (
+                      <form onSubmit={handleReviewSubmit} className="pt-2 border-t border-slate-800 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <label className="font-bold text-cyan-400 text-xs">ADMINISTRATIVE ACTION & AUDIT SIGN-OFF:</label>
+                          <select
+                            value={reviewResolution}
+                            onChange={e => setReviewResolution(e.target.value)}
+                            className="bg-slate-900 border border-slate-700 text-cyan-300 px-3 py-1 rounded outline-none font-bold"
+                          >
+                            <option value="RESOLVED">MARK AS RESOLVED</option>
+                            <option value="DISMISSED">DISMISS AS BENIGN</option>
+                          </select>
+                        </div>
+                        <input
+                          type="text"
+                          value={reviewNotes}
+                          onChange={e => setReviewNotes(e.target.value)}
+                          placeholder="Enter administrative review notes..."
+                          className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white outline-none"
+                        />
+                        {reviewMsg && <div className="text-emerald-400 text-[11px] font-bold">{reviewMsg}</div>}
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => setIsReviewOpen(false)}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg font-bold"
+                          >
+                            CLOSE
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold shadow"
+                          >
+                            RECORD AUDIT REVIEW
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <div className="text-right">
+                        <button
+                          type="button"
+                          onClick={() => setIsReviewOpen(false)}
+                          className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg font-bold"
+                        >
+                          CLOSE
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 2: IP INTELLIGENCE & ASSET REGISTRY */}
+          {monitorTab === 'IP_ASSETS' && (
+            <div className="space-y-6">
+              {/* Top Sub-Grid: Detect IP + Lookup */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Panel A: Detect My Connection IP */}
+                <div className={`p-5 rounded-2xl border ${cardBg} font-mono text-xs space-y-4`}>
+                  <div className="flex items-center justify-between border-b pb-3 border-slate-800">
+                    <div>
+                      <h3 className="font-bold text-sm text-cyan-400">DETECT MY CONNECTION IP</h3>
+                      <p className="text-[11px] text-slate-400">Inspect server-observed client socket connection</p>
+                    </div>
+                    <button
+                      onClick={handleDetectMyIp}
+                      disabled={isDetectingIp}
+                      className="px-3.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold transition shadow"
+                    >
+                      {isDetectingIp ? 'Detecting...' : '🔍 Detect Connection IP'}
+                    </button>
+                  </div>
+
+                  {detectedIpData ? (
+                    <div className={`p-4 rounded-xl border ${innerBg} space-y-2`}>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-400">OBSERVED IP:</span>
+                        <code className="text-base font-bold text-cyan-300">{detectedIpData.ip}</code>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">IP VERSION:</span>
+                        <span className="font-bold">{detectedIpData.version}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">CLASSIFICATION:</span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                          detectedIpData.isPrivate ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                        }`}>
+                          {detectedIpData.classification} ({detectedIpData.description})
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+                        {detectedIpData.note}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-8 text-center text-slate-500">
+                      Click "Detect Connection IP" to observe your remote IP address as received by the NETRISH server.
+                    </div>
+                  )}
+                </div>
+
+                {/* Panel B: IP Lookup & Forensic Enrichment */}
+                <div className={`p-5 rounded-2xl border ${cardBg} font-mono text-xs space-y-4`}>
+                  <div className="border-b pb-3 border-slate-800">
+                    <h3 className="font-bold text-sm text-cyan-400">IP LOOKUP & ENRICHMENT</h3>
+                    <p className="text-[11px] text-slate-400">Query DNS PTR records, ISP/ASN, and registered asset links</p>
+                  </div>
+
+                  <form onSubmit={handleLookup} className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Enter IPv4 or IPv6 address (e.g. 10.42.18.91 or 8.8.8.8)..."
+                      value={lookupIp}
+                      onChange={e => setLookupIp(e.target.value)}
+                      className={`flex-1 p-2 rounded-lg border outline-none ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isLookingUp}
+                      className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 text-white rounded-lg font-bold transition shadow"
+                    >
+                      {isLookingUp ? 'Analyzing...' : 'Analyze IP'}
+                    </button>
+                  </form>
+
+                  {lookupError && (
+                    <div className="p-3 bg-red-950/80 border border-red-800 text-red-200 rounded-lg">
+                      {lookupError}
+                    </div>
+                  )}
+
+                  {lookupResult && (
+                    <div className={`p-4 rounded-xl border ${innerBg} space-y-2`}>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-400">TARGET IP:</span>
+                        <strong className="text-cyan-300 text-sm">{lookupResult.ip}</strong>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">CLASSIFICATION:</span>
+                        <span className="text-emerald-400 font-bold">{lookupResult.description}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">REVERSE DNS (PTR):</span>
+                        <code className="text-cyan-400">{lookupResult.reverseDns}</code>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">NETWORK / ORG:</span>
+                        <span>{lookupResult.enrichment?.org || 'N/A'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">GEOLOCATION:</span>
+                        <span>{lookupResult.enrichment?.city}, {lookupResult.enrichment?.country}</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-1 border-t border-slate-800">
+                        <span className="text-slate-400">ENRICHMENT STATUS:</span>
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700">
+                          {lookupResult.enrichmentStatus}
+                        </span>
+                      </div>
+
+                      <div className="pt-2 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAssetForm({
+                              ip: lookupResult.ip,
+                              name: `Asset ${lookupResult.ip}`,
+                              description: `Identified via forensic IP lookup (${lookupResult.description})`,
+                              category: lookupResult.isPrivate ? 'GATEWAY' : 'SERVER',
+                              hostname: lookupResult.reverseDns !== 'No PTR record found' ? lookupResult.reverseDns : '',
+                              networkProvider: lookupResult.enrichment?.org || '',
+                              cameraReference: '',
+                              tags: 'ENRICHED,FORENSIC',
+                              notes: '',
+                              associatedCaseId: 'C00228'
+                            });
+                            setIsAssetModalOpen(true);
+                          }}
+                          className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg font-bold"
+                        >
+                          + Save as Department Asset
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Department Asset Registry Table */}
+              <div className={`p-5 rounded-2xl border ${cardBg} font-mono text-xs space-y-4`}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                  <div>
+                    <h3 className="font-bold text-sm text-cyan-400">DEPARTMENT IP ASSET INVENTORY</h3>
+                    <p className="text-[11px] text-slate-400">
+                      Persistent hardware switches, servers, and cameras registered for {store.getDepartmentName(userDept)}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="Search IP, Name, Hostname..."
+                      value={assetSearch}
+                      onChange={e => setAssetSearch(e.target.value)}
+                      className={`p-1.5 px-3 rounded-lg border outline-none text-xs ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <select
+                      value={assetCategory}
+                      onChange={e => setAssetCategory(e.target.value)}
+                      className={`p-1.5 px-3 rounded-lg border outline-none text-xs font-bold ${
+                        isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    >
+                      <option value="ALL">All Categories</option>
+                      <option value="GATEWAY">Gateway</option>
+                      <option value="NVR_CAMERA">NVR Camera</option>
+                      <option value="SERVER">Server</option>
+                      <option value="WORKSTATION">Workstation</option>
+                      <option value="ROUTER">Router</option>
+                      <option value="FIREWALL">Firewall</option>
+                      <option value="OTHER">Other</option>
+                    </select>
+                    <button
+                      onClick={() => {
+                        setEditingAsset(null);
+                        setAssetForm({
+                          ip: '',
+                          name: '',
+                          description: '',
+                          category: 'GATEWAY',
+                          hostname: '',
+                          networkProvider: '',
+                          cameraReference: '',
+                          tags: '',
+                          notes: '',
+                          associatedCaseId: ''
+                        });
+                        setIsAssetModalOpen(true);
+                      }}
+                      className="px-3.5 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg shadow"
+                    >
+                      + Register Asset
+                    </button>
+                    <a
+                      href="/api/network/assets/export?format=json"
+                      download="department_ip_assets.json"
+                      className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 font-bold"
+                    >
+                      📥 Export JSON
+                    </a>
+                  </div>
+                </div>
+
+                {/* Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className={`text-[11px] border-b uppercase ${isDark ? 'bg-slate-950 text-slate-400 border-slate-800' : 'bg-slate-100 text-slate-700 border-slate-200'}`}>
+                      <tr>
+                        <th className="p-3">Asset ID</th>
+                        <th className="p-3">IP Address</th>
+                        <th className="p-3">Name & Description</th>
+                        <th className="p-3">Category</th>
+                        <th className="p-3">Hostname / Camera Ref</th>
+                        <th className="p-3">Status</th>
+                        <th className="p-3 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
+                      {assets
+                        .filter(a => {
+                          if (assetCategory !== 'ALL' && a.category !== assetCategory) return false;
+                          if (assetSearch) {
+                            const q = assetSearch.toLowerCase();
+                            return a.ip.toLowerCase().includes(q) || a.name.toLowerCase().includes(q) || (a.hostname && a.hostname.toLowerCase().includes(q));
+                          }
+                          return true;
+                        })
+                        .map(a => (
+                          <tr key={a.id} className={`${isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'} transition`}>
+                            <td className="p-3 font-bold text-cyan-400">{a.id}</td>
+                            <td className="p-3 font-bold">{a.ip}</td>
+                            <td className="p-3">
+                              <div className="font-semibold text-white">{a.name}</div>
+                              <div className="text-[10px] text-slate-400">{a.description}</div>
+                            </td>
+                            <td className="p-3">
+                              <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-cyan-300 border border-slate-700">
+                                {a.category}
+                              </span>
+                            </td>
+                            <td className="p-3 text-slate-300">
+                              <div>{a.hostname || 'N/A'}</div>
+                              {a.cameraReference && (
+                                <div className="text-[10px] text-amber-400 font-bold">Cam: {a.cameraReference}</div>
+                              )}
+                            </td>
+                            <td className="p-3">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                a.verificationStatus === 'VERIFIED' ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'
+                              }`}>
+                                {a.verificationStatus}
+                              </span>
+                            </td>
+                            <td className="p-3 text-right space-x-2">
+                              <button
+                                onClick={() => {
+                                  setEditingAsset(a);
+                                  setAssetForm({
+                                    ip: a.ip,
+                                    name: a.name,
+                                    description: a.description || '',
+                                    category: a.category,
+                                    hostname: a.hostname || '',
+                                    networkProvider: a.networkProvider || '',
+                                    cameraReference: a.cameraReference || '',
+                                    tags: Array.isArray(a.tags) ? a.tags.join(', ') : '',
+                                    notes: a.notes || '',
+                                    associatedCaseId: a.associatedCaseId || ''
+                                  });
+                                  setIsAssetModalOpen(true);
+                                }}
+                                className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => setHistoryAsset(a)}
+                                className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 rounded text-[11px]"
+                              >
+                                History
+                              </button>
+                              <button
+                                onClick={() => handleDeactivateAsset(a.id)}
+                                className="px-2 py-1 bg-red-950 hover:bg-red-900 text-red-300 rounded text-[11px]"
+                              >
+                                Deactivate
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Scoped Internal Network Discovery (Admin only) */}
+              <div className={`p-5 rounded-2xl border ${cardBg} font-mono text-xs space-y-4`}>
+                <div className="border-b pb-3 border-slate-800 flex items-center justify-between">
+                  <div>
+                    <h3 className="font-bold text-sm text-purple-400">AUTHORIZED INTERNAL NETWORK DISCOVERY</h3>
+                    <p className="text-[11px] text-slate-400">Scoped, non-destructive ICMP/port discovery on department private subnets</p>
+                  </div>
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-purple-950 text-purple-300 border border-purple-800">
+                    ADMIN PRIVILEGE REQUIRED
+                  </span>
+                </div>
+
+                {isAdmin ? (
+                  <form onSubmit={handleRunDiscovery} className="space-y-3">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={discoveryCidr}
+                        onChange={e => setDiscoveryCidr(e.target.value)}
+                        placeholder="e.g. 10.42.18.0/28 (Private RFC1918 range only)"
+                        className={`flex-1 p-2 rounded-lg border outline-none ${
+                          isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                        }`}
+                      />
+                      <button
+                        type="submit"
+                        disabled={isDiscovering}
+                        className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-bold transition shadow"
+                      >
+                        {isDiscovering ? 'Scanning Subnet...' : 'Run Scoped Discovery'}
+                      </button>
+                    </div>
+
+                    {discoveryMsg && (
+                      <div className="p-3 bg-red-950/80 border border-red-800 text-red-200 rounded-lg">
+                        {discoveryMsg}
+                      </div>
+                    )}
+
+                    {discoveryResults && (
+                      <div className={`p-4 rounded-xl border ${innerBg} space-y-3`}>
+                        <div className="flex justify-between font-bold text-cyan-300">
+                          <span>CIDR: {discoveryResults.cidr}</span>
+                          <span>Responsive Hosts: {discoveryResults.responsiveHosts} / {discoveryResults.scannedHosts}</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          {discoveryResults.hosts.map(h => (
+                            <div key={h.ip} className="p-2.5 rounded bg-slate-900 border border-slate-800 flex justify-between items-center">
+                              <div>
+                                <span className="font-bold text-white">{h.ip}</span>
+                                <span className="text-[10px] text-slate-400 block">{h.suggestedCategory} • Latency: {h.latencyMs}ms</span>
+                              </div>
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                h.isRegistered ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'
+                              }`}>
+                                {h.isRegistered ? `Registered (${h.assetId})` : 'Unregistered'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </form>
+                ) : (
+                  <div className="p-4 rounded-xl border border-slate-800 bg-slate-950 text-slate-400 text-center">
+                    🔒 Internal network discovery is restricted to Department Administrators and Security Guardians.
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: ACTIVE SESSIONS & TELEMETRY */}
+          {monitorTab === 'SESSIONS' && (
+            <div className="space-y-6">
+              <div className={`p-5 rounded-2xl border ${cardBg} font-mono text-xs space-y-4`}>
+                <div className="border-b pb-3 border-slate-800">
+                  <h3 className="font-bold text-sm text-cyan-400">ACTIVE AUTHENTICATED SESSIONS</h3>
+                  <p className="text-[11px] text-slate-400">Real session store monitoring officer logins, last activity, and IP terminals</p>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className={`text-[11px] border-b uppercase ${isDark ? 'bg-slate-950 text-slate-400 border-slate-800' : 'bg-slate-100 text-slate-700 border-slate-200'}`}>
+                      <tr>
+                        <th className="p-3">Officer ID</th>
+                        <th className="p-3">Officer Name</th>
+                        <th className="p-3">Department</th>
+                        <th className="p-3">Role</th>
+                        <th className="p-3">Client Terminal IP</th>
+                        <th className="p-3">Login Time</th>
+                        <th className="p-3">Last Activity</th>
+                      </tr>
+                    </thead>
+                    <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
+                      {activeSessions.length === 0 ? (
+                        <tr>
+                          <td colSpan="7" className="p-8 text-center text-slate-500">
+                            No active remote sessions. Current officer session is active.
+                          </td>
+                        </tr>
+                      ) : (
+                        activeSessions.map(s => (
+                          <tr key={s.officerId} className={`${isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'} transition`}>
+                            <td className="p-3 font-bold text-cyan-400">{s.officerId}</td>
+                            <td className="p-3 font-semibold text-white">{s.officerName}</td>
+                            <td className="p-3 text-slate-400">{s.departmentName || s.department}</td>
+                            <td className="p-3">{s.role}</td>
+                            <td className="p-3 font-bold text-amber-400">{s.ip}</td>
+                            <td className="p-3 text-[10px] text-slate-400">{new Date(s.loginTime).toLocaleTimeString()}</td>
+                            <td className="p-3 text-[10px] text-emerald-400">{new Date(s.lastActivity).toLocaleTimeString()}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Real Authentication Event Log */}
+              <div className={`p-5 rounded-2xl border ${cardBg} font-mono text-xs space-y-4`}>
+                <div className="border-b pb-3 border-slate-800">
+                  <h3 className="font-bold text-sm text-emerald-400">AUTHENTICATION AUDIT LOG (SHA-256 HASH CHAIN)</h3>
+                  <p className="text-[11px] text-slate-400">Cryptographically verifiable login, logout, and session expiration events</p>
+                </div>
+
+                <div className="space-y-2">
+                  {recentAuthLogs.map(l => (
+                    <div key={l.id} className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex justify-between items-center text-[11px]">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-bold text-cyan-400">{l.id}</span>
+                        <span className="text-slate-600">•</span>
+                        <span className="text-white font-bold">{l.action}</span>
+                        <span className="text-slate-400">({l.officer_name || l.officer_id})</span>
+                      </div>
+                      <div className="text-slate-400">
+                        {new Date(l.timestamp).toLocaleTimeString()} • IP: {l.ip}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal: Register / Edit Asset */}
+          {isAssetModalOpen && (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[120] p-4 font-mono text-xs">
+              <div className="max-w-lg w-full bg-[#0b1329] border border-cyan-500/40 rounded-2xl p-6 shadow-2xl text-white space-y-4 max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center border-b pb-3 border-slate-700">
+                  <h3 className="font-bold text-sm text-cyan-400">
+                    {editingAsset ? `EDIT ASSET: ${editingAsset.id}` : 'REGISTER NEW DEPARTMENT IP ASSET'}
+                  </h3>
+                  <button onClick={() => setIsAssetModalOpen(false)} className="text-slate-400 hover:text-white">✕</button>
+                </div>
+
+                {assetMsg && (
+                  <div className="p-3 bg-slate-900 border border-cyan-500 rounded-lg">
+                    {assetMsg}
                   </div>
                 )}
 
-                <div className="absolute top-3 left-3 bg-black/80 border border-slate-800 p-2 rounded text-[10px] font-mono space-y-0.5">
-                  <div className="text-cyan-400 font-bold">CAMERA: SEC-CAM-04 (OFFICER CONSOLE)</div>
-                  <div className="text-slate-200">Officer: {activeSession?.requestingOfficer || 'Insp. Vikram Rathore'}</div>
-                  <div className="text-emerald-400">Biometric Identity: VERIFIED & LOGGED</div>
+                <form onSubmit={handleSaveAsset} className="space-y-3">
+                  <div>
+                    <label className="text-slate-400 block mb-1">IP ADDRESS *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 10.42.18.91"
+                      value={assetForm.ip}
+                      disabled={Boolean(editingAsset)}
+                      onChange={e => setAssetForm({ ...assetForm, ip: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-slate-400 block mb-1">ASSET NAME *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Gateway Optical Switch"
+                      value={assetForm.name}
+                      onChange={e => setAssetForm({ ...assetForm, name: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white outline-none"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-slate-400 block mb-1">CATEGORY</label>
+                      <select
+                        value={assetForm.category}
+                        onChange={e => setAssetForm({ ...assetForm, category: e.target.value })}
+                        className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white outline-none"
+                      >
+                        <option value="GATEWAY">Gateway</option>
+                        <option value="NVR_CAMERA">NVR Camera</option>
+                        <option value="SERVER">Server</option>
+                        <option value="WORKSTATION">Workstation</option>
+                        <option value="ROUTER">Router</option>
+                        <option value="FIREWALL">Firewall</option>
+                        <option value="OTHER">Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-slate-400 block mb-1">CAMERA REFERENCE (OPTIONAL)</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. CAM-EVID-04"
+                        value={assetForm.cameraReference}
+                        onChange={e => setAssetForm({ ...assetForm, cameraReference: e.target.value })}
+                        className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-slate-400 block mb-1">REVERSE DNS HOSTNAME</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. switch01.police.gov.in"
+                      value={assetForm.hostname}
+                      onChange={e => setAssetForm({ ...assetForm, hostname: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-slate-400 block mb-1">DESCRIPTION</label>
+                    <textarea
+                      rows="2"
+                      value={assetForm.description}
+                      onChange={e => setAssetForm({ ...assetForm, description: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white outline-none"
+                    ></textarea>
+                  </div>
+
+                  <div className="flex justify-end space-x-2 pt-2 border-t border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setIsAssetModalOpen(false)}
+                      className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg font-bold"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg font-bold shadow"
+                    >
+                      Save Asset ➔
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Modal: Asset History */}
+          {historyAsset && (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[120] p-4 font-mono text-xs">
+              <div className="max-w-md w-full bg-[#0b1329] border border-cyan-500/40 rounded-2xl p-6 shadow-2xl text-white space-y-4">
+                <div className="flex justify-between items-center border-b pb-3 border-slate-700">
+                  <h3 className="font-bold text-sm text-cyan-400">CHANGE HISTORY: {historyAsset.id}</h3>
+                  <button onClick={() => setHistoryAsset(null)} className="text-slate-400 hover:text-white">✕</button>
                 </div>
 
-                <div className="absolute bottom-3 right-3 bg-red-950/90 border border-red-800 px-2.5 py-1 rounded text-[10px] font-mono text-red-300">
-                  FORENSIC RECORDING ACTIVE
+                <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                  {historyAsset.changeHistory && historyAsset.changeHistory.length > 0 ? (
+                    historyAsset.changeHistory.map((h, idx) => (
+                      <div key={idx} className="p-2.5 rounded bg-slate-950 border border-slate-800 space-y-1">
+                        <div className="flex justify-between text-[10px] text-slate-400">
+                          <span>{new Date(h.timestamp).toLocaleString()}</span>
+                          <span className="font-bold text-cyan-300">{h.action}</span>
+                        </div>
+                        <div className="text-slate-200">{h.details}</div>
+                        <div className="text-[10px] text-slate-500">By Officer: {h.officerId}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-slate-500 text-center py-4">No change history recorded.</div>
+                  )}
                 </div>
               </div>
-
-              <div className="p-3 bg-[#080e1c] border-t border-slate-800 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400">Badge: CBI-SP-041 (Special Crime Unit)</span>
-                <span className="text-emerald-400">● LIVE ENCRYPTED VIDEO FEED</span>
-              </div>
             </div>
-          </div>
-
-          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-              <div>
-                <h3 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
-                  REAL-TIME TELEMETRY & ACTIVITY REPORT
-                </h3>
-                <p className="text-[11px] text-slate-400 font-mono">
-                  Continuous log of how long the officer has been viewing each document and moving their cursor.
-                </p>
-              </div>
-
-              {activeSession && !isRevoked && (
-                <button
-                  onClick={() => handleEmergencyRevoke(activeSession.id)}
-                  className="px-5 py-2.5 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-500 hover:to-rose-500 text-white font-mono text-xs font-black tracking-wider uppercase rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.5)] transition animate-pulse"
-                >
-                  🚨 EMERGENCY REVOKE & KILL ACCESS
-                </button>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">TOTAL VIEWING TIME:</span>
-                <strong className="text-cyan-400 text-sm">{formatTime(viewingSeconds)}</strong>
-                <p className="text-[10px] text-slate-400 mt-0.5">On Document GST-ITC-RECON-C00228.pdf</p>
-              </div>
-
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">MOUSE & CURSOR TELEMETRY:</span>
-                <strong className="text-amber-400 text-sm">Active at X: {mousePos.x}, Y: {mousePos.y}</strong>
-                <p className="text-[10px] text-slate-400 mt-0.5">Focusing on Row 3 (HDFC Escrow A/C ••8831)</p>
-              </div>
-
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">DOCUMENT NAVIGATION LOG:</span>
-                <strong className="text-emerald-400 text-sm">Tab: {activeDocTab} View</strong>
-                <p className="text-[10px] text-slate-400 mt-0.5">Scroll Depth: 68% • No screenshot attempts</p>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       );
+    }
+
+    function LiveSurveillanceRoomView(props) {
+      return <NetworkCameraSecurityMonitorView {...props} />;
     }
 
     function MyDepartmentView({ onRequestAccess, onSelectCase, setTab, isDark }) {
@@ -3932,10 +5539,10 @@
                     <div className="text-slate-300">Target File: <strong>Case #{r.caseId}</strong> ({r.suspectIdentifier})</div>
                     <div className="flex justify-end space-x-2 pt-1">
                       <button
-                        onClick={() => setTab('surveillance-room')}
+                        onClick={() => setTab('network-monitor')}
                         className="px-3 py-1 bg-cyan-900 text-cyan-300 border border-cyan-700 rounded text-[11px]"
                       >
-                        Open Live Surveillance Room 📹
+                        Open Network & Camera Monitor 📡
                       </button>
                     </div>
                   </div>
@@ -4133,10 +5740,10 @@
                     Trace Movement Route on Map 🗺️
                   </button>
                   <button
-                    onClick={() => setTab('surveillance-room')}
-                    className="px-4 py-2 bg-red-950/80 border border-red-800 text-red-300 hover:bg-red-900 rounded-lg"
+                    onClick={() => setTab('network-monitor')}
+                    className="px-4 py-2 bg-cyan-950/80 border border-cyan-800 text-cyan-300 hover:bg-cyan-900 rounded-lg"
                   >
-                    Place Under Live Surveillance 📹
+                    Open Network & Camera Monitor 📡
                   </button>
                 </div>
               </div>
@@ -4176,8 +5783,15 @@
       );
     }
 
-    function AuthModal({ isOpen, onClose, onLoginSuccess }) {
-      const [authTab, setAuthTab] = useState('LOGIN');
+    function AuthModal({ isOpen, initialTab = 'LOGIN', onClose, onLoginSuccess }) {
+      const [authTab, setAuthTab] = useState(initialTab || 'LOGIN');
+
+      useEffect(() => {
+        if (isOpen && initialTab) {
+          setAuthTab(initialTab);
+          setErr('');
+        }
+      }, [isOpen, initialTab]);
 
       const [loginId, setLoginId] = useState('OFFICER-001');
       const [loginName, setLoginName] = useState('Inspector Vikram');
@@ -4230,6 +5844,10 @@
         .then(r => r.json())
         .then(d => {
           if (d.success) {
+            if (d.pendingApproval) {
+              setErr(`✅ Enrollment submitted! Status: PENDING_APPROVAL. An authorized department administrator must approve your enrollment before you can log in.`);
+              return;
+            }
             onLoginSuccess(d.user, d.token);
             onClose();
           } else {
@@ -4259,6 +5877,10 @@
         .then(r => r.json())
         .then(d => {
           if (d.success) {
+            if (d.pendingApproval) {
+              setErr(`✅ Enrollment submitted! Status: PENDING_APPROVAL. An authorized department administrator must approve your enrollment before you can log in.`);
+              return;
+            }
             onLoginSuccess(d.user, d.token);
             onClose();
           } else {
@@ -4849,19 +6471,49 @@
     }
 
     function App() {
+      const savedTheme = localStorage.getItem('netrish_theme') || 'dark';
+      const [isDark, setIsDark] = useState(savedTheme === 'dark');
       const [isLanding, setIsLanding] = useState(true);
       const [currentTab, setCurrentTab] = useState('dashboard');
-      const [isDark, setIsDark] = useState(true);
       const [currentUser, setCurrentUser] = useState(null);
       const [isAuthOpen, setIsAuthOpen] = useState(false);
+      const [authModalInitialTab, setAuthModalInitialTab] = useState('LOGIN');
       const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
       const [requestModalData, setRequestModalData] = useState({});
       const [selectedCaseId, setSelectedCaseId] = useState('C00228');
       const [selectedEntityId, setSelectedEntityId] = useState('P0732');
 
+      useEffect(() => {
+        document.documentElement.classList.toggle('dark', isDark);
+        localStorage.setItem('netrish_theme', isDark ? 'dark' : 'light');
+      }, [isDark]);
+
+      useEffect(() => {
+        const savedToken = localStorage.getItem('netrish_token');
+        if (savedToken) {
+          fetch('/api/auth/session', {
+            headers: { 'Authorization': `Bearer ${savedToken}` }
+          })
+            .then(r => r.json())
+            .then(d => {
+              if (d.success && d.user) {
+                setCurrentUser(d.user);
+                setIsLanding(false);
+              } else {
+                localStorage.removeItem('netrish_token');
+                localStorage.removeItem('netrish_user');
+                setCurrentUser(null);
+                setIsLanding(true);
+              }
+            })
+            .catch(() => {
+              setIsLanding(true);
+            });
+        }
+      }, []);
+
       const toggleTheme = () => {
         setIsDark(!isDark);
-        document.documentElement.classList.toggle('dark', !isDark);
       };
 
       const handleOpenRequestAccess = (data = {}) => {
@@ -4869,16 +6521,50 @@
         setIsRequestModalOpen(true);
       };
 
+      const handleLoginSuccess = (user, token) => {
+        setCurrentUser(user);
+        if (token) {
+          localStorage.setItem('netrish_token', token);
+          localStorage.setItem('netrish_user', JSON.stringify(user));
+        }
+        setIsLanding(false);
+      };
+
+      const handleLogout = () => {
+        const token = localStorage.getItem('netrish_token');
+        if (token) {
+          fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          }).catch(() => {});
+        }
+        localStorage.removeItem('netrish_token');
+        localStorage.removeItem('netrish_user');
+        setCurrentUser(null);
+        setIsLanding(true);
+      };
+
+      const handleOpenAuth = (initialTab = 'LOGIN') => {
+        setAuthModalInitialTab(initialTab);
+        setIsAuthOpen(true);
+      };
+
       if (isLanding) {
         return (
           <>
             <LandingPage
-              onAutoEnter={() => setIsLanding(false)}
+              isAuthenticated={Boolean(currentUser)}
+              onAutoEnter={() => {
+                if (currentUser) setIsLanding(false);
+                else handleOpenAuth('LOGIN');
+              }}
+              onOpenAuth={handleOpenAuth}
             />
             <AuthModal
               isOpen={isAuthOpen}
+              initialTab={authModalInitialTab}
               onClose={() => setIsAuthOpen(false)}
-              onLoginSuccess={(u) => { setCurrentUser(u); setIsLanding(false); }}
+              onLoginSuccess={handleLoginSuccess}
             />
           </>
         );
@@ -4922,8 +6608,9 @@
                 isDark={isDark}
               />
             );
+          case 'network-monitor':
           case 'surveillance-room':
-            return <LiveSurveillanceRoomView isDark={isDark} />;
+            return <NetworkCameraSecurityMonitorView isDark={isDark} currentUser={currentUser} setTab={setCurrentTab} />;
           case 'ai-investigation':
             return <AiInvestigationChatbotView isDark={isDark} />;
           case 'cross-case':
@@ -4985,8 +6672,8 @@
         <div className={`min-h-screen flex flex-col font-sans ${isDark ? 'bg-[#060913] text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
           <Navbar
             currentUser={currentUser}
-            onLogout={() => setCurrentUser(null)}
-            onOpenAuth={() => setIsAuthOpen(true)}
+            onLogout={handleLogout}
+            onOpenAuth={() => handleOpenAuth('LOGIN')}
             isDark={isDark}
             toggleTheme={toggleTheme}
           />
@@ -5000,8 +6687,9 @@
 
           <AuthModal
             isOpen={isAuthOpen}
+            initialTab={authModalInitialTab}
             onClose={() => setIsAuthOpen(false)}
-            onLoginSuccess={(u) => setCurrentUser(u)}
+            onLoginSuccess={handleLoginSuccess}
           />
 
           <RequestAccessModal

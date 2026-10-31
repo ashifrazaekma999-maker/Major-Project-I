@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
+import { hashPassword, hashPin } from './authUtils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,6 +10,9 @@ const __dirname = path.dirname(__filename);
 class NetrishDataStore {
   constructor() {
     this.records = [];
+    this.recordIndex = new Map();
+    this.caseRecords = new Map();
+    this.personRecords = new Map();
     this.entities = new Map();
     this.cases = new Map();
     this.departments = new Map();
@@ -23,6 +27,8 @@ class NetrishDataStore {
     this.workspaces = new Map();
     this.users = new Map();
     this.isLoaded = false;
+    this.loadedPath = null;
+    this.datasetMetadata = null;
 
     this.initMockUsers();
     this.initGenesisAudit();
@@ -87,10 +93,11 @@ class NetrishDataStore {
         role: 'Investigator',
         department: 'D001',
         departmentName: 'Cyber Crime Investigation Division',
-        pin: '2618',
-        password: 'Password@123',
+        pin: hashPin('2618'),
+        password: hashPassword('Password@123'),
         status: 'ACTIVE',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+        permissions: ['CASE_READ', 'CASE_WRITE', 'ENTITY_SEARCH', 'TIMELINE_VIEW']
       },
       {
         id: 'ADMIN-007',
@@ -99,10 +106,11 @@ class NetrishDataStore {
         role: 'Department Admin',
         department: 'D001',
         departmentName: 'Cyber Crime Investigation Division',
-        pin: '1234',
-        password: 'Password@123',
+        pin: hashPin('1234'),
+        password: hashPassword('Password@123'),
         status: 'ACTIVE',
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150'
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150',
+        permissions: ['CASE_READ', 'CASE_WRITE', 'ENTITY_SEARCH', 'TIMELINE_VIEW', 'ADMIN_CLEARANCE', 'OFFICER_APPROVE']
       },
       {
         id: 'SEC-012',
@@ -111,10 +119,11 @@ class NetrishDataStore {
         role: 'Security Guardian',
         department: 'D005',
         departmentName: 'Intelligence & Surveillance Directorate',
-        pin: '9999',
-        password: 'Password@123',
+        pin: hashPin('9999'),
+        password: hashPassword('Password@123'),
         status: 'ACTIVE',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+        permissions: ['CASE_READ', 'CASE_WRITE', 'ENTITY_SEARCH', 'TIMELINE_VIEW', 'SURVEILLANCE_ADMIN', 'SECURITY_AUDIT']
       },
       {
         id: 'LEAD-034',
@@ -123,10 +132,63 @@ class NetrishDataStore {
         role: 'Management Overview',
         department: 'D010',
         departmentName: 'Special Operations Command',
-        pin: '2026',
-        password: 'Password@123',
+        pin: hashPin('2026'),
+        password: hashPassword('Password@123'),
         status: 'ACTIVE',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150'
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+        permissions: ['CASE_READ', 'ENTITY_SEARCH', 'TIMELINE_VIEW', 'GLOBAL_OVERVIEW']
+      },
+      {
+        id: 'OFF-CBI-001',
+        name: 'Inspector Rajesh Verma',
+        email: 'r.verma@cbi.gov.in',
+        role: 'Investigating Officer',
+        department: 'D002',
+        departmentName: 'CBI (Central Bureau of Investigation)',
+        pin: hashPin('1234'),
+        password: hashPassword('Password123!'),
+        status: 'ACTIVE',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+        permissions: ['CASE_READ', 'CASE_WRITE', 'ENTITY_SEARCH', 'TIMELINE_VIEW']
+      },
+      {
+        id: 'OFF-CYBER-002',
+        name: 'DSP Priya Nair',
+        email: 'priya.nair@cybercrime.gov.in',
+        role: 'Investigating Officer',
+        department: 'D001',
+        departmentName: 'Cyber Crime Cell (I4C)',
+        pin: hashPin('2345'),
+        password: hashPassword('Password123!'),
+        status: 'ACTIVE',
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150',
+        permissions: ['CASE_READ', 'CASE_WRITE', 'ENTITY_SEARCH', 'TIMELINE_VIEW']
+      },
+      {
+        id: 'OFF-GST-003',
+        name: 'Joint Comm. Amit Sharma',
+        email: 'amit.sharma@dggi.gov.in',
+        role: 'Investigating Officer',
+        department: 'D006',
+        departmentName: 'GST Intelligence (DGGI)',
+        pin: hashPin('3456'),
+        password: hashPassword('Password123!'),
+        status: 'ACTIVE',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+        permissions: ['CASE_READ', 'CASE_WRITE', 'ENTITY_SEARCH', 'TIMELINE_VIEW']
+      },
+      {
+        id: 'OFF-DIR-000',
+        name: 'Director Vikramaditya',
+        email: 'director@mha.gov.in',
+        role: 'Director',
+        department: 'D001',
+        departmentName: 'Directorate General (MHA Central)',
+        pin: hashPin('9999'),
+        password: hashPassword('AdminSecure999!'),
+        status: 'ACTIVE',
+        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+        permissions: ['CASE_READ', 'CASE_WRITE', 'ENTITY_SEARCH', 'TIMELINE_VIEW', 'ADMIN_CLEARANCE', 'GLOBAL_OVERVIEW']
       }
     ];
 
@@ -182,36 +244,119 @@ class NetrishDataStore {
     return entry;
   }
 
+  reset() {
+    this.records = [];
+    this.recordIndex = new Map();
+    this.caseRecords = new Map();
+    this.personRecords = new Map();
+    this.entities = new Map();
+    this.cases = new Map();
+    this.departments = new Map();
+    this.phones = new Map();
+    this.vehicles = new Map();
+    this.organizations = new Map();
+    this.locations = new Map();
+    this.graph = new Map();
+    this.isLoaded = false;
+    this.loadedPath = null;
+    this.datasetMetadata = null;
+  }
+
+  resolveDatasetPath(candidatePath) {
+    if (candidatePath && fs.existsSync(path.resolve(candidatePath))) {
+      return path.resolve(candidatePath);
+    }
+    if (process.env.DATASET_PATH && fs.existsSync(path.resolve(process.env.DATASET_PATH))) {
+      return path.resolve(process.env.DATASET_PATH);
+    }
+    const roots = [
+      process.cwd(),
+      path.resolve(__dirname, '..'),
+      path.resolve(__dirname, '../..')
+    ];
+    const filenames = [
+      'NETRISH_Synthetic_Dataset_200000.csv',
+      'data/NETRISH_Synthetic_Dataset_200000.csv',
+      'data/dataset.csv'
+    ];
+    for (const r of roots) {
+      for (const f of filenames) {
+        const full = path.resolve(r, f);
+        if (fs.existsSync(full)) {
+          return full;
+        }
+      }
+    }
+    return path.resolve(__dirname, '../data/dataset.csv');
+  }
+
   loadDataset(csvPath) {
-    if (this.isLoaded) return;
+    const resolvedPath = this.resolveDatasetPath(csvPath);
+    if (this.isLoaded && this.loadedPath === resolvedPath) return true;
+    if (this.isLoaded) {
+      this.reset();
+    }
+
     try {
-      const resolvedPath = path.resolve(csvPath);
       if (!fs.existsSync(resolvedPath)) {
         console.error(`Dataset not found at ${resolvedPath}`);
         return false;
       }
 
-      const content = fs.readFileSync(resolvedPath, 'utf-8');
-      const lines = content.split(/\r?\n/).filter(line => line.trim().length > 0);
-      if (lines.length < 2) return false;
+      console.log(`[NETRISH DataStore] Loading dataset from: ${resolvedPath}`);
+      const content = fs.readFileSync(resolvedPath, 'utf-8').replace(/^\uFEFF/, '');
+      let lineStart = 0;
+      let header = null;
+      let headers = [];
 
-      const headers = lines[0].split(',').map(h => h.trim());
+      while (lineStart < content.length) {
+        let lineEnd = content.indexOf('\n', lineStart);
+        if (lineEnd === -1) lineEnd = content.length;
+        const line = content.slice(lineStart, lineEnd).trim();
+        lineStart = lineEnd + 1;
+        if (!line) continue;
 
-      for (let i = 1; i < lines.length; i++) {
-        const line = lines[i];
+        if (!header) {
+          header = line;
+          headers = line.split(',').map(h => h.trim());
+          continue;
+        }
+
         const values = this.parseCSVLine(line);
         if (values.length < headers.length) continue;
 
         const row = {};
-        headers.forEach((h, idx) => {
-          row[h] = values[idx] || '';
-        });
+        for (let j = 0; j < headers.length; j++) {
+          row[headers[j]] = values[j] || '';
+        }
 
         this.records.push(row);
+        this.recordIndex.set(row.record_id, row);
+
+        if (row.case_id) {
+          if (!this.caseRecords.has(row.case_id)) this.caseRecords.set(row.case_id, []);
+          this.caseRecords.get(row.case_id).push(row);
+        }
+        if (row.person_id) {
+          if (!this.personRecords.has(row.person_id)) this.personRecords.set(row.person_id, []);
+          this.personRecords.get(row.person_id).push(row);
+        }
+
         this.indexRow(row);
       }
 
       this.isLoaded = true;
+      this.loadedPath = resolvedPath;
+      this.datasetMetadata = {
+        path: resolvedPath,
+        fileName: path.basename(resolvedPath),
+        loadedRows: this.records.length,
+        totalRows: this.records.length,
+        isSynthetic: true,
+        label: 'TEST ONLY / SYNTHETIC DATASET — Not real criminal records'
+      };
+
+      console.log(`[NETRISH DataStore] Successfully indexed ${this.records.length} records, ${this.entities.size} entities, ${this.cases.size} cases.`);
       return true;
     } catch (err) {
       console.error('Error loading dataset:', err);
@@ -393,12 +538,33 @@ class NetrishDataStore {
     if (!this.graph.has(v)) this.graph.set(v, new Map());
 
     const uEdges = this.graph.get(u);
-    if (!uEdges.has(v)) uEdges.set(v, []);
-    uEdges.get(v).push({ type: relType, ...meta });
+    let uList = uEdges.get(v);
+    if (!uList) {
+      uList = [];
+      uEdges.set(v, uList);
+    }
+    const existingU = uList.find(e => e.type === relType);
+    if (existingU) {
+      existingU.weight = (existingU.weight || 1) + 1;
+      if (meta.anomaly_score > (existingU.anomaly_score || 0)) {
+        existingU.anomaly_score = meta.anomaly_score;
+      }
+    } else {
+      uList.push({ type: relType, weight: 1, ...meta });
+    }
 
     const vEdges = this.graph.get(v);
-    if (!vEdges.has(u)) vEdges.set(u, []);
-    vEdges.get(u).push({ type: relType, ...meta, reverse: true });
+    let vList = vEdges.get(u);
+    if (!vList) {
+      vList = [];
+      vEdges.set(u, vList);
+    }
+    const existingV = vList.find(e => e.type === relType);
+    if (existingV) {
+      existingV.weight = (existingV.weight || 1) + 1;
+    } else {
+      vList.push({ type: relType, weight: 1, ...meta, reverse: true });
+    }
   }
 
   getDepartmentName(deptId) {

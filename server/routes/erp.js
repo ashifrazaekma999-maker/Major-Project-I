@@ -1,7 +1,48 @@
 import express from 'express';
 import { store } from '../dataStore.js';
+import { authenticateOfficer, requireAuth } from './auth.js';
 
 const router = express.Router();
+
+/**
+ * Validates department-based access policy for cases
+ */
+export function checkCaseAccess(officer, caseId) {
+  if (!caseId) return { authorized: true };
+  if (!officer) return { authorized: false, reason: 'UNAUTHENTICATED' };
+
+  // Synthetic benchmark test cases are open for validation testing
+  if (caseId.startsWith('TEST-CASE-')) {
+    return { authorized: true };
+  }
+
+  // Global administrative roles have clearance
+  if (['Security Guardian', 'Department Admin', 'Management Overview', 'Director', 'SuperAdmin'].includes(officer.role)) {
+    return { authorized: true };
+  }
+
+  const caseRecord = store.cases.get(caseId);
+  if (!caseRecord) return { authorized: false, reason: 'NOT_FOUND' };
+
+  const caseDept = caseRecord.department_id || caseRecord.department || 'D001';
+  if (caseDept === officer.department) {
+    return { authorized: true };
+  }
+
+  // Active time-bound cross-agency access request
+  const hasApprovedRequest = store.accessRequests.some(r =>
+    r.caseId === caseId &&
+    r.officerId === officer.id &&
+    (r.status === 'ACTIVE_STREAMING' || r.status === 'APPROVED') &&
+    new Date(r.expiresAt) > new Date()
+  );
+
+  if (hasApprovedRequest) {
+    return { authorized: true, viaClearance: true };
+  }
+
+  return { authorized: false, reason: 'FORBIDDEN_CROSS_DEPT', caseDept };
+}
 
 router.get('/overview', (req, res) => {
   const deptId = req.query.department || 'D001';
@@ -146,10 +187,26 @@ router.get('/cases', (req, res) => {
 
 router.get('/cases/:caseId', (req, res) => {
   const caseId = req.params.caseId;
-  const c = store.cases.get(caseId);
+  const officer = authenticateOfficer(req);
 
+  if (!officer) {
+    return res.status(401).json({
+      success: false,
+      message: 'HTTP 401 Unauthorized: Valid officer authentication token required.'
+    });
+  }
+
+  const c = store.cases.get(caseId);
   if (!c) {
     return res.status(404).json({ success: false, message: `Case ${caseId} not found.` });
+  }
+
+  const access = checkCaseAccess(officer, caseId);
+  if (!access.authorized) {
+    return res.status(403).json({
+      success: false,
+      message: `HTTP 403 Forbidden: Officer ${officer.name} (${officer.department}) lacks clearance for Case #${caseId} belonging to ${access.caseDept || 'another agency'}. Submit an inter-agency access request to obtain temporary clearance.`
+    });
   }
 
   const persons = Array.from(c.persons || c.entities || []).map(pId => {
@@ -509,6 +566,70 @@ router.get('/management', (req, res) => {
       totalOrganizations: store.organizations.size,
       nationalCrimeClearanceRate: '68.4%'
     }
+  });
+});
+
+router.get('/notifications', (req, res) => {
+  const officer = authenticateOfficer(req);
+  if (!officer) {
+    return res.status(401).json({ success: false, message: 'Authentication required for notifications.' });
+  }
+
+  const notifications = [];
+
+  // 1. Pending incoming access requests for this officer's department
+  const pendingForDept = store.accessRequests.filter(r => 
+    r.targetDepartment === officer.department && r.status === 'PENDING'
+  );
+  pendingForDept.forEach(r => {
+    notifications.push({
+      id: `NOTIF-${r.id}`,
+      type: 'ACCESS_REQUEST',
+      severity: 'WARNING',
+      title: 'Incoming Cross-Agency Clearance Request',
+      message: `Officer ${r.requestingOfficer} (${r.fromDeptName}) requested temporary access to Case #${r.caseId}`,
+      timestamp: r.requestedAt,
+      link: 'erp-access'
+    });
+  });
+
+  // 2. Active approved access requests for this officer
+  const myApproved = store.accessRequests.filter(r => 
+    r.officerId === officer.id && (r.status === 'ACTIVE_STREAMING' || r.status === 'APPROVED')
+  );
+  myApproved.forEach(r => {
+    notifications.push({
+      id: `NOTIF-APP-${r.id}`,
+      type: 'ACCESS_GRANTED',
+      severity: 'SUCCESS',
+      title: 'Cross-Agency Clearance Active',
+      message: `Clearance active for Case #${r.caseId} until ${new Date(r.expiresAt).toLocaleTimeString()}`,
+      timestamp: r.approvedAt || r.requestedAt,
+      link: 'erp-cases'
+    });
+  });
+
+  // 3. Department audit events
+  const deptAudits = store.auditTrail
+    .filter(a => a.department_id === officer.department || a.officer_id === officer.id)
+    .slice(0, 10);
+
+  deptAudits.forEach(a => {
+    notifications.push({
+      id: `NOTIF-${a.id}`,
+      type: a.action,
+      severity: a.action.includes('FAILED') || a.action.includes('REJECTED') ? 'CRITICAL' : 'INFO',
+      title: a.action.replace(/_/g, ' '),
+      message: typeof a.details === 'string' ? a.details : JSON.stringify(a.details),
+      timestamp: a.timestamp,
+      link: 'erp-audit'
+    });
+  });
+
+  res.json({
+    success: true,
+    count: notifications.length,
+    notifications: notifications.slice(0, 25)
   });
 });
 

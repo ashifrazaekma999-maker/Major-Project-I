@@ -1,0 +1,59 @@
+{
+  "203.0.113.195": {
+    "timestamp": 1793277768893,
+    "result": {
+      "ip": "203.0.113.195",
+      "classification": "PUBLIC",
+      "isPrivate": false,
+      "riskLevel": "PROVIDER UNAVAILABLE",
+      "score": null,
+      "provider": "AbuseIPDB",
+      "providerStatus": "KEY_NOT_CONFIGURED",
+      "details": "AbuseIPDB threat intelligence key not configured (set ABUSEIPDB_API_KEY in server environment).",
+      "reportsCount": 0,
+      "lastReportedAt": null,
+      "geolocation": {
+        "available": false,
+        "note": "IP Geolocation provider not configured (set IPINFO_TOKEN in server environment)."
+      }
+    }
+  },
+  "198.51.100.25": {
+    "timestamp": 1793277768903,
+    "result": {
+      "ip": "198.51.100.25",
+      "classification": "PUBLIC",
+      "isPrivate": false,
+      "riskLevel": "PROVIDER UNAVAILABLE",
+      "score": null,
+      "provider": "AbuseIPDB",
+      "providerStatus": "KEY_NOT_CONFIGURED",
+      "details": "AbuseIPDB threat intelligence key not configured (set ABUSEIPDB_API_KEY in server environment).",
+      "reportsCount": 0,
+      "lastReportedAt": null,
+      "geolocation": {
+        "available": false,
+        "note": "IP Geolocation provider not configured (set IPINFO_TOKEN in server environment)."
+      }
+    }
+  },
+  "198.51.100.99": {
+    "timestamp": 1793277768910,
+    "result": {
+      "ip": "198.51.100.99",
+      "classification": "PUBLIC",
+      "isPrivate": false,
+      "riskLevel": "PROVIDER UNAVAILABLE",
+      "score": null,
+      "provider": "AbuseIPDB",
+      "providerStatus": "KEY_NOT_CONFIGURED",
+      "details": "AbuseIPDB threat intelligence key not configured (set ABUSEIPDB_API_KEY in server environment).",
+      "reportsCount": 0,
+      "lastReportedAt": null,
+      "geolocation": {
+        "available": false,
+        "note": "IP Geolocation provider not configured (set IPINFO_TOKEN in server environment)."
+      }
+    }
+  }
+}

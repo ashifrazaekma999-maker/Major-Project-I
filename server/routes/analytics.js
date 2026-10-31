@@ -67,4 +67,11 @@ router.get('/anomalies', (req, res) => {
   });
 });
 
+router.get('/export/audit', (req, res) => {
+  const data = JSON.stringify(store.auditTrail, null, 2);
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Disposition', 'attachment; filename="netrish_audit_ledger.json"');
+  res.send(data);
+});
+
 export default router;

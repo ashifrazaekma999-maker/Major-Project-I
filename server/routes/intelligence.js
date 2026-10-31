@@ -484,16 +484,17 @@ router.get('/cross-case', (req, res) => {
 router.get('/timeline', (req, res) => {
   const { caseId, personId, limit = 50 } = req.query;
 
-  let events = store.records;
+  let rawList = [];
 
   if (caseId) {
-    events = events.filter(r => r.case_id === caseId);
-  }
-  if (personId) {
-    events = events.filter(r => r.person_id === personId);
+    rawList = store.caseRecords.get(caseId) || [];
+  } else if (personId) {
+    rawList = store.personRecords.get(personId) || [];
+  } else {
+    rawList = store.records.slice(0, 200);
   }
 
-  events = events
+  const events = rawList
     .map(r => ({
       record_id: r.record_id,
       datetime: r.event_datetime,
@@ -508,7 +509,7 @@ router.get('/timeline', (req, res) => {
       ai_signal: r.ai_signal
     }))
     .sort((a, b) => (a.datetime > b.datetime ? -1 : 1))
-    .slice(0, parseInt(limit));
+    .slice(0, parseInt(limit, 10));
 
   res.json({ success: true, count: events.length, events });
 });

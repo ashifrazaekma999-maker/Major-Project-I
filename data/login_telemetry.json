@@ -1,0 +1,799 @@
+[
+  {
+    "id": "LOG-EVT-0026",
+    "timestamp": "2026-10-30T05:03:49.870Z",
+    "status": "SUCCESS",
+    "officerId": "OFFICER-001",
+    "officerName": "Inspector Vikram Rathore",
+    "departmentId": "D001",
+    "departmentName": "Cyber Crime Investigation Division",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+    "apparentBrowser": "Microsoft Edge",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0025",
+    "timestamp": "2026-10-29T17:45:32.479Z",
+    "status": "SUCCESS",
+    "officerId": "OFFICER-001",
+    "officerName": "Inspector Vikram Rathore",
+    "departmentId": "D001",
+    "departmentName": "Cyber Crime Investigation Division",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+    "apparentBrowser": "Microsoft Edge",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0024",
+    "timestamp": "2026-10-29T13:14:43.322Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-DIR-000",
+    "officerName": "Director Vikramaditya",
+    "departmentId": "D001",
+    "departmentName": "Directorate General (MHA Central)",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "node",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0023",
+    "timestamp": "2026-10-29T13:09:53.392Z",
+    "status": "SUCCESS",
+    "officerId": "OFFICER-001",
+    "officerName": "Inspector Vikram Rathore",
+    "departmentId": "D001",
+    "departmentName": "Cyber Crime Investigation Division",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+    "apparentBrowser": "Microsoft Edge",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0022",
+    "timestamp": "2026-10-29T13:08:19.457Z",
+    "status": "SUCCESS",
+    "officerId": "OFFICER-001",
+    "officerName": "Inspector Vikram Rathore",
+    "departmentId": "D001",
+    "departmentName": "Cyber Crime Investigation Division",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Antigravity/2.28.0 Chrome/152.0.7977.130 Electron/44.5.1 Safari/537.36",
+    "apparentBrowser": "Google Chrome",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0021",
+    "timestamp": "2026-10-29T13:06:58.834Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Inspector Rajesh Verma",
+    "departmentId": "D002",
+    "departmentName": "CBI (Central Bureau of Investigation)",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "node",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0020",
+    "timestamp": "2026-10-29T13:06:19.151Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-DIR-000",
+    "officerName": "Director Vikramaditya",
+    "departmentId": "D001",
+    "departmentName": "Directorate General (MHA Central)",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "node",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0019",
+    "timestamp": "2026-10-29T13:02:12.733Z",
+    "status": "FAILED_CREDENTIALS",
+    "officerId": "OFF-DIR-000",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "node",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": "Unknown Officer ID",
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0018",
+    "timestamp": "2026-10-29T12:55:01.515Z",
+    "status": "FAILED_CREDENTIALS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "::1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "curl/8.21.0",
+    "apparentBrowser": "cURL CLI",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (::1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": "Unknown Officer ID",
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0017",
+    "timestamp": "2026-10-29T12:47:20.847Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "127.0.0.1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (127.0.0.1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0016",
+    "timestamp": "2026-10-29T12:47:20.841Z",
+    "status": "RATE_LIMITED",
+    "officerId": "TEST-OFF-01",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "198.51.100.99",
+    "classification": "PUBLIC",
+    "classificationDesc": "Public Internet IPv4 Address",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "IP Geolocation provider not configured (set IPINFO_TOKEN in server environment)."
+    },
+    "reputation": {
+      "score": null,
+      "risk": "PROVIDER UNAVAILABLE",
+      "provider": "AbuseIPDB",
+      "status": "KEY_NOT_CONFIGURED",
+      "note": "AbuseIPDB threat intelligence key not configured (set ABUSEIPDB_API_KEY in server environment)."
+    },
+    "failureReason": "Rate limit threshold exceeded",
+    "reviewStatus": "RESOLVED",
+    "reviewedBy": "Director Vikramaditya (OFF-DIR-000)",
+    "reviewNotes": "Benign automated scanner test.",
+    "reviewedAt": "2026-10-29T12:47:20.844Z"
+  },
+  {
+    "id": "LOG-EVT-0015",
+    "timestamp": "2026-10-29T12:46:03.636Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "127.0.0.1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (127.0.0.1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0014",
+    "timestamp": "2026-10-29T12:46:03.630Z",
+    "status": "RATE_LIMITED",
+    "officerId": "TEST-OFF-01",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "198.51.100.99",
+    "classification": "PUBLIC",
+    "classificationDesc": "Public Internet IPv4 Address",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "IP Geolocation provider not configured (set IPINFO_TOKEN in server environment)."
+    },
+    "reputation": {
+      "score": null,
+      "risk": "PROVIDER UNAVAILABLE",
+      "provider": "AbuseIPDB",
+      "status": "KEY_NOT_CONFIGURED",
+      "note": "AbuseIPDB threat intelligence key not configured (set ABUSEIPDB_API_KEY in server environment)."
+    },
+    "failureReason": "Rate limit threshold exceeded",
+    "reviewStatus": "RESOLVED",
+    "reviewedBy": "Director Vikramaditya (OFF-DIR-000)",
+    "reviewNotes": "Benign automated scanner test.",
+    "reviewedAt": "2026-10-29T12:46:03.634Z"
+  },
+  {
+    "id": "LOG-EVT-0013",
+    "timestamp": "2026-10-29T12:42:48.918Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "127.0.0.1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (127.0.0.1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "LOCAL_NETWORK_CLASSIFIER",
+      "status": "LOCAL_RFC_CLASSIFIED",
+      "note": "Internal private/loopback address. Not subject to public abuse reports."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0012",
+    "timestamp": "2026-10-29T12:42:48.912Z",
+    "status": "RATE_LIMITED",
+    "officerId": "TEST-OFF-01",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "198.51.100.99",
+    "classification": "PUBLIC",
+    "classificationDesc": "Public Internet IPv4 Address",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "IP Geolocation provider not configured (set IPINFO_TOKEN in server environment)."
+    },
+    "reputation": {
+      "score": null,
+      "risk": "PROVIDER UNAVAILABLE",
+      "provider": "AbuseIPDB",
+      "status": "KEY_NOT_CONFIGURED",
+      "note": "AbuseIPDB threat intelligence key not configured (set ABUSEIPDB_API_KEY in server environment)."
+    },
+    "failureReason": "Rate limit threshold exceeded",
+    "reviewStatus": "RESOLVED",
+    "reviewedBy": "Director Vikramaditya (OFF-DIR-000)",
+    "reviewNotes": "Benign automated scanner test.",
+    "reviewedAt": "2026-10-29T12:42:48.916Z"
+  },
+  {
+    "id": "LOG-EVT-0011",
+    "timestamp": "2026-10-29T06:17:20.278Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-GST-003",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "192.168.1.50",
+    "classification": "PRIVATE_RFC1918",
+    "classificationDesc": "Private Class C (192.168.0.0/16)",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (192.168.1.50). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTERNAL_NETWORK",
+      "note": "Internal network or loopback address."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0010",
+    "timestamp": "2026-10-29T06:17:20.274Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Inspector Rajesh Verma",
+    "departmentId": "D002",
+    "departmentName": "CBI",
+    "ip": "127.0.0.1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0.0.0",
+    "apparentBrowser": "Google Chrome",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (127.0.0.1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTERNAL_NETWORK",
+      "note": "Internal network or loopback address."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0009",
+    "timestamp": "2026-10-29T05:58:45.186Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-GST-003",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "192.168.1.50",
+    "classification": "PRIVATE_RFC1918",
+    "classificationDesc": "Private Class C (192.168.0.0/16)",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (192.168.1.50). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTERNAL_NETWORK",
+      "note": "Internal network or loopback address."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0008",
+    "timestamp": "2026-10-29T05:58:45.176Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Inspector Rajesh Verma",
+    "departmentId": "D002",
+    "departmentName": "CBI",
+    "ip": "127.0.0.1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0.0.0",
+    "apparentBrowser": "Google Chrome",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (127.0.0.1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTERNAL_NETWORK",
+      "note": "Internal network or loopback address."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0007",
+    "timestamp": "2026-10-29T05:55:28.162Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-GST-003",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "192.168.1.50",
+    "classification": "PRIVATE_RFC1918",
+    "classificationDesc": "Private Class C (192.168.0.0/16)",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (192.168.1.50). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTERNAL_NETWORK",
+      "note": "Internal network or loopback address."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0006",
+    "timestamp": "2026-10-29T05:55:28.151Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Inspector Rajesh Verma",
+    "departmentId": "D002",
+    "departmentName": "CBI",
+    "ip": "127.0.0.1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0.0.0",
+    "apparentBrowser": "Google Chrome",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (127.0.0.1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTERNAL_NETWORK",
+      "note": "Internal network or loopback address."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0005",
+    "timestamp": "2026-10-29T05:46:24.521Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-GST-003",
+    "officerName": "Unknown Officer",
+    "departmentId": "D001",
+    "departmentName": "Law Enforcement",
+    "ip": "192.168.1.50",
+    "classification": "PRIVATE_RFC1918",
+    "classificationDesc": "Private Class C (192.168.0.0/16)",
+    "userAgent": "Unknown",
+    "apparentBrowser": "Unknown Browser",
+    "apparentOS": "Unknown OS",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (192.168.1.50). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTERNAL_NETWORK",
+      "note": "Internal network or loopback address."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0004",
+    "timestamp": "2026-10-29T05:46:24.496Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Inspector Rajesh Verma",
+    "departmentId": "D002",
+    "departmentName": "CBI",
+    "ip": "127.0.0.1",
+    "classification": "LOOPBACK",
+    "classificationDesc": "Loopback Host Interface",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0.0.0",
+    "apparentBrowser": "Google Chrome",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for internal address (127.0.0.1). Physical location is not determinable via IP."
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTERNAL_NETWORK",
+      "note": "Internal network or loopback address."
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0001",
+    "timestamp": "2026-10-29T03:46:14.383Z",
+    "status": "SUCCESS",
+    "officerId": "OFF-CBI-001",
+    "officerName": "Inspector Rajesh Verma",
+    "departmentId": "D002",
+    "departmentName": "CBI (Central Bureau of Investigation)",
+    "ip": "10.42.18.91",
+    "ipVersion": "IPv4",
+    "classification": "RFC1918_PRIVATE",
+    "classificationDesc": "Private / Department Intranet",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0.0.0",
+    "apparentBrowser": "Google Chrome",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "CBI-HQ-SECURE-TERMINAL-01",
+    "isEnrolledDevice": true,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for private intranet IP (10.42.18.91)"
+    },
+    "reputation": {
+      "score": 0,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "TRUSTED_INTRANET"
+    },
+    "failureReason": null,
+    "reviewStatus": "VERIFIED"
+  },
+  {
+    "id": "LOG-EVT-0002",
+    "timestamp": "2026-10-29T05:01:14.383Z",
+    "status": "FAILED",
+    "officerId": "OFF-GST-003",
+    "officerName": "Joint Comm. Amit Sharma",
+    "departmentId": "D006",
+    "departmentName": "GST Intelligence (DGGI)",
+    "ip": "192.168.1.105",
+    "ipVersion": "IPv4",
+    "classification": "RFC1918_PRIVATE",
+    "classificationDesc": "Private / Department Subnet",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Edg/128.0.0.0",
+    "apparentBrowser": "Microsoft Edge",
+    "apparentOS": "Windows 10/11",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": false,
+      "note": "Location unavailable for RFC 1918 private address"
+    },
+    "reputation": {
+      "score": 10,
+      "risk": "LOW RISK",
+      "provider": "Local Network Rules",
+      "status": "UNENROLLED_DEVICE"
+    },
+    "failureReason": "Invalid 4-digit security PIN provided",
+    "reviewStatus": "PENDING_REVIEW"
+  },
+  {
+    "id": "LOG-EVT-0003",
+    "timestamp": "2026-10-29T05:31:14.383Z",
+    "status": "FAILED",
+    "officerId": "UNKNOWN",
+    "officerName": "Unknown Caller",
+    "departmentId": "D001",
+    "departmentName": "Cyber Crime Cell (I4C)",
+    "ip": "185.220.101.5",
+    "ipVersion": "IPv4",
+    "classification": "PUBLIC",
+    "classificationDesc": "Public Network Address",
+    "userAgent": "python-requests/2.31.0",
+    "apparentBrowser": "cURL / CLI",
+    "apparentOS": "Linux",
+    "deviceEnrolledName": "Unenrolled Device",
+    "isEnrolledDevice": false,
+    "approximateGeo": {
+      "available": true,
+      "country": "Germany",
+      "region": "Hesse",
+      "city": "Frankfurt",
+      "lat": 50.1109,
+      "lon": 8.6821,
+      "isp": "Tor Exit Node Relay",
+      "asn": "AS208323",
+      "disclaimer": "Approximate network geolocation; does not reveal physical street address."
+    },
+    "reputation": {
+      "score": 95,
+      "risk": "HIGH RISK",
+      "provider": "AbuseIPDB Threat Intelligence",
+      "status": "SUSPICIOUS_TOR_EXIT",
+      "reportCount": 312
+    },
+    "failureReason": "Account does not exist: brute force suspect",
+    "reviewStatus": "FLAGGED_FOR_REVIEW"
+  }
+]
